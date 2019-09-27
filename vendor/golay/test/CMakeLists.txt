@@ -1,0 +1,4 @@
+add_executable(test_golay test_golay.c)
+target_link_libraries(test_golay golay)
+
+add_test(NAME test_golay COMMAND test_golay)
