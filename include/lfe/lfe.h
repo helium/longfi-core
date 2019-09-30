@@ -61,19 +61,19 @@ enum sf {
  * Initializes a user-provided `lfe` object.
  */
 void
-lfe_init(struct lfe * lfe);
+lfe_init(struct lfe const * lfe);
 
 /**
  * Push a received payload into the engine.
  */
 void
-lfe_push_rx(struct lfe * lfe, uint8_t const * pay, size_t pay_len);
+lfe_push_rx(struct lfe const * lfe, uint8_t const * pay, size_t pay_len);
 
 /**
  * Initializes and returns a transmit plan.
  */
 void
-lfe_transmit(struct lfe * lfe, uint8_t const * pay, size_t pay_len);
+lfe_transmit(struct lfe const * lfe, uint8_t const * pay, size_t pay_len);
 
 
 #ifdef __cplusplus
