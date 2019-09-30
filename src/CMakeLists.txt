@@ -1,5 +1,6 @@
 add_library(lfe
   lfe.c
+  lfe_dg_parse.c
   )
 
 target_link_libraries(lfe
