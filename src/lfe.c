@@ -1,6 +1,6 @@
+#include "lfe/lfe.h"
+#include "golay/golay.h"
 #include <assert.h>
-#include <golay/golay.h>
-#include <lfe/lfe.h>
 
 void
 lfe_init(struct lfe const * lfe) {

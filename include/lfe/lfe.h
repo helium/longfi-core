@@ -46,7 +46,7 @@ struct lfe {
  * susceptible to errors, where as large spreading factors are more
  * tolerant to noise but are slow to transmit.
  */
-enum sf {
+enum lfe_sf {
     sf_5  = 5,
     sf_6  = 6,
     sf_7  = 7,
