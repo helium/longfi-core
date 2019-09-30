@@ -4,7 +4,7 @@ add_library(lfe
   )
 
 target_link_libraries(lfe
-  PRIVATE golay
+  PRIVATE golay cursor
   )
 
 target_include_directories(lfe
