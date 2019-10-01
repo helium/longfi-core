@@ -1,11 +1,16 @@
 #include <assert.h>
 #include <cursor/varint.h>
+#include <fcntl.h>
 #include <greatest/greatest.h>
-#include <stdlib.h>
+#include <unistd.h>
 
 uint32_t
 rand_u32() {
-    return lrand48();
+    int      f = open("/dev/urandom", O_RDONLY);
+    uint32_t val;
+    assert(sizeof(val) == read(f, &val, sizeof(val)));
+    close(f);
+    return val;
 }
 
 TEST
