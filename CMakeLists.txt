@@ -17,8 +17,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Local                                                                  #
 ##########################################################################
 add_subdirectory(docs)
+add_subdirectory(extra)
 add_subdirectory(src)
-add_subdirectory(vendor)
 
 
 ##########################################################################
