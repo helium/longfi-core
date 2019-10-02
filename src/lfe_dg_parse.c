@@ -34,8 +34,7 @@ enum _lfe_dg_parse_res
 _lfe_dg_parse_header(uint8_t const * enc_hdr_bits, struct _lfe_dg_hdr * parsed) {
     enum _lfe_dg_parse_res res;
     uint16_t               dec_hdr_bits;
-    uint8_t                dec_bit_errs =
-        golay_decode(6, enc_hdr_bits, (uint8_t *)&dec_hdr_bits);
+    uint8_t dec_bit_errs = golay_decode12(enc_hdr_bits, &dec_hdr_bits);
 
     bool    dg_extended_bit = 1 == ((dec_hdr_bits >> 12) & 1);
     uint8_t dg_type_bits    = (dec_hdr_bits >> 6 & 0x1F /* 0b1_1111 */);
