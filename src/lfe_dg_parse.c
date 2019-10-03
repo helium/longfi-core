@@ -3,14 +3,21 @@
 #include <assert.h>
 #include <stdbool.h>
 
-enum _lfe_dg_parse_res
-_lfe_dg_parse(uint8_t const * pay, size_t pay_len, struct _lfe_dg_parsed * parsed) {
-    return _lfe_dg_parse_res_ok;
+#define CSR_RES(_eXpr_)                                                        \
+    do {                                                                       \
+        if (cursor_res_err_buf_exhausted == (_eXpr_)) {                        \
+            return lfe_dg_parse_res_err_nomem;                                 \
+        }                                                                      \
+    } while (0)
+
+enum lfe_dg_parse_res
+lfe_dg__parse(struct lfe_dg_parsed * out, struct cursor * csr) {
+    return lfe_dg_parse_res_ok;
 }
 
-struct _lfe_dg_flags
-_lfe_dg_parse_flags(uint8_t flag_bits) {
-    return (struct _lfe_dg_flags){
+struct lfe_dg_flags
+lfe_dg_parse__flags(uint8_t flag_bits) {
+    return (struct lfe_dg_flags){
         .failure         = ((flag_bits >> 0) & 1) == 1,
         .session_expired = ((flag_bits >> 1) & 1) == 1,
         .cts_rts         = ((flag_bits >> 2) & 1) == 1,
@@ -20,35 +27,39 @@ _lfe_dg_parse_flags(uint8_t flag_bits) {
     };
 }
 
-enum _lfe_dg_parse_res
-_lfe_dg_parse_type(uint8_t type_bits, enum _lfe_dg_type * parsed) {
-    if (type_bits == 0 || type_bits > _lfe_dg_type_ack) {
-        return _lfe_dg_parse_res_invalid_type;
+enum lfe_dg_parse_res
+lfe_dg_type__parse(enum lfe_dg_type * out, uint8_t type_bits) {
+    if (type_bits == 0 || type_bits > lfe_dg_type_ack) {
+        return lfe_dg_parse_res_invalid_type;
     }
-    *parsed = (enum _lfe_dg_type)type_bits;
-    return _lfe_dg_parse_res_ok;
+    *out = (enum lfe_dg_type)type_bits;
+    return lfe_dg_parse_res_ok;
 }
 
+enum lfe_dg_parse_res
+lfe_dg_hdr__parse(struct lfe_dg_hdr * out, struct cursor * csr) {
+    enum lfe_dg_parse_res res;
 
-enum _lfe_dg_parse_res
-_lfe_dg_parse_header(uint8_t const * enc_hdr_bits, struct _lfe_dg_hdr * parsed) {
-    enum _lfe_dg_parse_res res;
-    uint16_t               dec_hdr_bits;
-    uint8_t dec_bit_errs = golay_decode12(enc_hdr_bits, &dec_hdr_bits);
+    uint16_t dec_hdr_bits;
+    uint8_t  enc_hdr_bits[3];
+    CSR_RES(cursor_take(csr, sizeof(enc_hdr_bits), enc_hdr_bits));
 
+    int     dec_bit_errs    = golay_decode12(enc_hdr_bits, &dec_hdr_bits);
     bool    dg_extended_bit = 1 == ((dec_hdr_bits >> 12) & 1);
     uint8_t dg_type_bits    = (dec_hdr_bits >> 6 & 0x1F /* 0b1_1111 */);
     uint8_t dg_flags_bits   = (dec_hdr_bits & 0x3F /* 0b11_1111 */);
+
+    /* We're not handling extended tags yet. */
     assert(!dg_extended_bit);
 
-    *parsed = (struct _lfe_dg_hdr){
-        .bit_errs = dec_bit_errs,
-        .flags    = _lfe_dg_parse_flags(dg_flags_bits),
+    *out = (struct lfe_dg_hdr){
+        .bit_errs  = dec_bit_errs,
+        .flag_bits = dg_flags_bits,
     };
 
-    if ((res = _lfe_dg_parse_type(dg_type_bits, &parsed->type))) {
+    if ((res = lfe_dg_type__parse(&out->type, dg_type_bits))) {
         return res;
     }
 
-    return _lfe_dg_parse_res_ok;
+    return lfe_dg_parse_res_ok;
 }

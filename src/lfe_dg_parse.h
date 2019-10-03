@@ -9,47 +9,50 @@
  * @addtogroup Private
  */
 
+#include <cursor/cursor.h>
 #include <lfe/lfe.h>
 #include <stdbool.h>
 
 /** Constants */
-enum constants {
+enum CONSTANTS {
     /** Max supported datagram payload length. */
-    constants_max_pay_len = 128,
+    CONSTANTS_MAX_PAY_LEN = 128,
 };
 
 /**
  * Returned by parser to represent success or failure.
  */
-enum _lfe_dg_parse_res {
+enum lfe_dg_parse_res {
     /** Operation successful. */
-    _lfe_dg_parse_res_ok,
+    lfe_dg_parse_res_ok,
+    /** Reached end of provided data before complete parse. */
+    lfe_dg_parse_res_err_nomem,
     /** Invalid datagram type. */
-    _lfe_dg_parse_res_invalid_type,
+    lfe_dg_parse_res_invalid_type,
     /** Invalid datagram flags. */
-    _lfe_dg_parse_res_invalid_flags,
+    lfe_dg_parse_res_invalid_flags,
 };
 
 
 /**
  * The type (or variant) of datagram.
  */
-enum _lfe_dg_type {
+enum lfe_dg_type {
     /** Monolithic. */
-    _lfe_dg_type_monolithic = 1,
+    lfe_dg_type_monolithic = 1,
     /** Start of Frame. */
-    _lfe_dg_type_frame_start = 2,
+    lfe_dg_type_frame_start = 2,
     /** Frame Data. */
-    _lfe_dg_type_frame_data = 3,
+    lfe_dg_type_frame_data = 3,
     /** Ack. */
-    _lfe_dg_type_ack = 4,
+    lfe_dg_type_ack = 4,
 };
 
 
 /**
  * Represents bit flags in a datagram header.
  */
-struct _lfe_dg_flags {
+struct lfe_dg_flags {
     /**
      * The receiver was unable to receive the previous message.
      */
@@ -91,13 +94,13 @@ struct _lfe_dg_flags {
 /**
  * The result of parsing the golay-encoded header.
  */
-struct _lfe_dg_hdr {
+struct lfe_dg_hdr {
     /** Number of corrected bit errors. */
-    size_t bit_errs;
-    /** Parsed flags. */
-    struct _lfe_dg_flags flags;
+    int bit_errs;
+    /** Unparsed flags bits. */
+    uint8_t flag_bits;
     /** This datagram's type */
-    enum _lfe_dg_type type;
+    enum lfe_dg_type type;
 };
 
 
@@ -109,9 +112,9 @@ struct _lfe_dg_hdr {
  * or receiving small amounts of data, a Monolithic Datagram should be
  * used.
  */
-struct _lfe_dg_monolithic {
+struct lfe_dg_monolithic {
     /** Datagram flags. */
-    struct _lfe_dg_flags flags;
+    struct lfe_dg_flags flags;
     /** Organization ID. */
     uint32_t oui;
     /** Device ID. */
@@ -121,8 +124,9 @@ struct _lfe_dg_monolithic {
     /** Sequence number. */
     uint32_t seq;
     /** Data payload. */
-    uint8_t pay[constants_max_pay_len];
+    uint8_t pay[CONSTANTS_MAX_PAY_LEN];
 };
+
 
 /**
  * Start of Frame.
@@ -132,7 +136,7 @@ struct _lfe_dg_monolithic {
  * can hold. In some cases, if there's room, some of the payload may
  * appear at the end of this Datagram.
  */
-struct _lfe_dg_frame_start {};
+struct lfe_dg_frame_start {};
 
 
 /**
@@ -144,7 +148,7 @@ struct _lfe_dg_frame_start {};
  * between frames, but it is not needed to transmit it. The fragment
  * number is used to determine the ordering of the payload fragments.
  */
-struct _lfe_dg_frame_data {};
+struct lfe_dg_frame_data {};
 
 
 /**
@@ -155,13 +159,13 @@ struct _lfe_dg_frame_data {};
  * Should ACK flag set. The Ack datagram can indicate success or
  * failure and request retransmits.
  */
-struct _lfe_dg_ack {};
+struct lfe_dg_ack {};
 
 
 /**
  * A successfully parsed datagram.
  */
-struct _lfe_dg_parsed {
+struct lfe_dg_parsed {
     /**
      * Number of corrected bit errors in the header.
      */
@@ -171,12 +175,12 @@ struct _lfe_dg_parsed {
      *
      * Indicates which member of `u` is valid.
      */
-    enum _lfe_dg_type type;
+    enum lfe_dg_type type;
     union {
-        struct _lfe_dg_monolithic  monolithic;
-        struct _lfe_dg_frame_start frame_start;
-        struct _lfe_dg_frame_data  frame_data;
-        struct _lfe_dg_ack         ack;
+        struct lfe_dg_monolithic  monolithic;
+        struct lfe_dg_frame_start frame_start;
+        struct lfe_dg_frame_data  frame_data;
+        struct lfe_dg_ack         ack;
     };
 };
 
@@ -184,15 +188,25 @@ struct _lfe_dg_parsed {
 /**
  * Parses a received packet.
  */
-enum _lfe_dg_parse_res
-_lfe_dg_parse(uint8_t const * pay, size_t pay_len, struct _lfe_dg_parsed * parsed);
+enum lfe_dg_parse_res
+lfe_dg__parse(struct lfe_dg_parsed * out, struct cursor * csr);
+
+
+/**
+ * Parses a `monolithic` datagram.
+ */
+enum lfe_dg_parse_res
+lfe_dg_monolithic__parse(struct lfe_dg_monolithic * out,
+                         struct cursor *            csr,
+                         size_t                     pay_len,
+                         struct lfe_dg_hdr          hdr);
 
 
 /**
  * Parses a Golay-encoded datagram header.
  */
-enum _lfe_dg_parse_res
-_lfe_dg_parse_header(uint8_t const * enc_hdr_bits, struct _lfe_dg_hdr * parsed);
+enum lfe_dg_parse_res
+lfe_dg_hdr__parse(struct lfe_dg_hdr * out, struct cursor * csr);
 
 
 /** @} */
