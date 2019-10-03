@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 
+#include "golay/golay.h"
 #include <assert.h>
 #include <stdint.h>
 

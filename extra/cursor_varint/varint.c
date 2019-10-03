@@ -12,7 +12,7 @@ cursor_unpack_var_le_u32(struct cursor * csr, uint32_t * dst) {
     uint32_t        out = 0;
     enum cursor_res res = cursor_res_ok;
 
-    for (int i = 0; i <= sizeof(*dst); i++) {
+    for (size_t i = 0; i <= sizeof(*dst); i++) {
         uint8_t input;
         res = cursor_unpack_le_u8(csr, &input);
         if (res != cursor_res_ok) {
