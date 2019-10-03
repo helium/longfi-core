@@ -28,7 +28,7 @@ include(FetchContent)
 FetchContent_Declare(
   cursor
   GIT_REPOSITORY https://github.com/JayKickliter/cursor.git
-  GIT_TAG        81200ceda9d48a4cd1605ae3c68e35dac4765526
+  GIT_TAG        7a4a5a86130835a86865d6668a6df61be20b912e
   )
 FetchContent_GetProperties(cursor)
 if(NOT cursor_POPULATED)
