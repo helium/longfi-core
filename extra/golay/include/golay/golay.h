@@ -30,16 +30,22 @@
 extern "C" {
 #endif
 
-/// encode 12 bits of data into 24 coded bits
+/**
+ * Encodes 12 data bits into 24 coded bits.
+ */
 void
 golay_encode12(uint16_t const in, uint8_t * out);
 
-/// decode 24 bits of coded data into 12 bits of original data
-//  returns number of corrected bits, or -1 on decode failure
-int8_t
+/**
+ * Decodes 24 coded bits into 12 data bits.
+ *
+ * @retval number of corrected bits.
+ * @retval -1 on failure to decode.
+ */
+int
 golay_decode12(uint8_t const * in, uint16_t * out);
 
-uint32_t
+int
 popcount_2(uint32_t x);
 
 

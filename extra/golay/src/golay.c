@@ -59,7 +59,7 @@ uint32_t golay2412_H[12] = {0x008008ed,
                             0x00002477,
                             0x00001ffe};
 
-uint32_t
+int
 popcount_2(uint32_t x) {
     uint32_t m1 = 0x55555555;
     uint32_t m2 = 0x33333333;
@@ -123,7 +123,7 @@ fec_golay2412_encode_symbol(uint16_t const _sym_dec) {
     return golay2412_matrix_mul(_sym_dec, golay2412_Gt, 24);
 }
 
-int8_t
+int
 fec_golay2412_decode_symbol(uint32_t _sym_enc, uint16_t * out) {
     // validate input
     assert(_sym_enc < (1 << 24));
@@ -206,13 +206,8 @@ golay_encode12(uint16_t const in, uint8_t * out) {
 
 // decode 24 bits of coded data into 12 bits of original data
 // returns number of corrected bits or -1 on decode failure
-int8_t
+int
 golay_decode12(uint8_t const * in, uint16_t * out) {
-    int8_t errcount = 0;
-
     uint32_t input = (in[2] << 16) | (in[1] << 8) | in[0];
-
-    errcount = fec_golay2412_decode_symbol(input, out);
-
-    return errcount;
+    return fec_golay2412_decode_symbol(input, out);
 }
