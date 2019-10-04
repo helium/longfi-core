@@ -10,22 +10,26 @@
         }                                                                      \
     } while (0)
 
+
+
+
 enum lfe_dg_parse_res
 lfe_dg__parse(struct lfe_dg_parsed * out, struct cursor * csr) {
     return lfe_dg_parse_res_ok;
 }
 
-struct lfe_dg_flags
-lfe_dg_parse__flags(uint8_t flag_bits) {
-    return (struct lfe_dg_flags){
+
+struct lfe_dg_ack_flags
+lfe_dg_ack_flags__parse(uint8_t flag_bits) {
+    return (struct lfe_dg_ack_flags){
         .failure         = ((flag_bits >> 0) & 1) == 1,
         .session_expired = ((flag_bits >> 1) & 1) == 1,
         .cts_rts         = ((flag_bits >> 2) & 1) == 1,
         .retransmit      = ((flag_bits >> 3) & 1) == 1,
         .ldpc            = ((flag_bits >> 4) & 1) == 1,
-        .reserved        = ((flag_bits >> 5) & 1) == 1,
     };
 }
+
 
 enum lfe_dg_parse_res
 lfe_dg_type__parse(enum lfe_dg_type * out, uint8_t type_bits) {
@@ -35,6 +39,7 @@ lfe_dg_type__parse(enum lfe_dg_type * out, uint8_t type_bits) {
     *out = (enum lfe_dg_type)type_bits;
     return lfe_dg_parse_res_ok;
 }
+
 
 enum lfe_dg_parse_res
 lfe_dg_hdr__parse(struct lfe_dg_hdr * out, struct cursor * csr) {

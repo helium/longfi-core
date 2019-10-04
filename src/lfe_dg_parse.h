@@ -13,11 +13,13 @@
 #include <lfe/lfe.h>
 #include <stdbool.h>
 
+
 /** Constants */
 enum CONSTANTS {
     /** Max supported datagram payload length. */
     CONSTANTS_MAX_PAY_LEN = 128,
 };
+
 
 /**
  * Returned by parser to represent success or failure.
@@ -50,48 +52,6 @@ enum lfe_dg_type {
 
 
 /**
- * Represents bit flags in a datagram header.
- */
-struct lfe_dg_flags {
-    /**
-     * The receiver was unable to receive the previous message.
-     */
-    bool failure;
-    /**
-     * Downlink only.
-     *
-     * The receiver requests the sender to renegotiate a session key.
-     */
-    bool session_expired;
-    /**
-     * Clear-to-send/ready-to-send.
-     *
-     * On uplink this bit indicates the device is ready to receive, on
-     * downlink it indicates further information follows.
-     */
-    bool cts_rts;
-    /**
-     * Retransmit requested.
-     */
-    bool retransmit;
-    /**
-     * LDCP Encoding.
-     *
-     * The packet, beyond the Tag field, is encoded with a [Low
-     * Density Parity
-     * Code](https://en.wikipedia.org/wiki/Low-density_parity-check_code).
-     * The specific code used depends on the maximum datagram size for
-     * the current region and spreading factor.
-     */
-    bool ldpc;
-    /**
-     * Reserved.
-     */
-    bool reserved;
-};
-
-
-/**
  * The result of parsing the golay-encoded header.
  */
 struct lfe_dg_hdr {
@@ -114,7 +74,35 @@ struct lfe_dg_hdr {
  */
 struct lfe_dg_monolithic {
     /** Datagram flags. */
-    struct lfe_dg_flags flags;
+    struct lfe_dg_monolithic_flags {
+        /**
+         * This packet is destined for a Device if this bit is set.
+         */
+        bool downlink;
+        /**
+         * The receiver of this packet should acknowledge receipt.
+         */
+        bool should_ack;
+        /**
+         * On uplink this bit indicates the device is ready to
+         * receive, on downlink it indicates further information
+         * follows.
+         */
+        bool cts_rts;
+        /**
+         * This indicates to the receiver that the packet is deemed
+         * urgent by the sender and the receiver can choose to act
+         * accordingly.
+         */
+        bool priority;
+        /**
+         * The packet, beyond the Tag field, is encoded with a Low
+         * Density Parity Code. The specific code used depends on the
+         * maximum datagram size for the current region and spreading
+         * factor.
+         */
+        bool ldpc;
+    } flags;
     /** Organization ID. */
     uint32_t oui;
     /** Device ID. */
@@ -159,7 +147,44 @@ struct lfe_dg_frame_data {};
  * Should ACK flag set. The Ack datagram can indicate success or
  * failure and request retransmits.
  */
-struct lfe_dg_ack {};
+struct lfe_dg_ack {
+    /**
+     * Ack-specific flags.
+     */
+    struct lfe_dg_ack_flags {
+        /**
+         * The receiver was unable to receive the previous message.
+         */
+        bool failure;
+        /**
+         * Downlink only.
+         *
+         * The receiver requests the sender to renegotiate a session key.
+         */
+        bool session_expired;
+        /**
+         * Clear-to-send/ready-to-send.
+         *
+         * On uplink this bit indicates the device is ready to receive, on
+         * downlink it indicates further information follows.
+         */
+        bool cts_rts;
+        /**
+         * Retransmit requested.
+         */
+        bool retransmit;
+        /**
+         * LDCP Encoding.
+         *
+         * The packet, beyond the Tag field, is encoded with a [Low
+         * Density Parity
+         * Code](https://en.wikipedia.org/wiki/Low-density_parity-check_code).
+         * The specific code used depends on the maximum datagram size for
+         * the current region and spreading factor.
+         */
+        bool ldpc;
+    } flags;
+};
 
 
 /**
