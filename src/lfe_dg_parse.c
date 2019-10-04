@@ -1,4 +1,5 @@
 #include "lfe_dg_parse.h"
+#include "cursor/varint.h"
 #include "golay/golay.h"
 #include <assert.h>
 #include <stdbool.h>
@@ -63,9 +64,15 @@ lfe_dg_monolithic__parse(struct lfe_dg_monolithic * out,
                          struct lfe_dg_hdr          hdr,
                          struct cursor *            csr) {
     assert(hdr.type = lfe_dg_type_monolithic);
-    enum lfe_dg_parse_res res = lfe_dg_parse_res_ok;
-    assert(res == lfe_dg_parse_res_ok);
-    return res;
+
+    out->flags = lfe_dg_monolithic_flags__parse(hdr.flag_bits);
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->oui));
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->did));
+    CSR_RES(cursor_unpack_le_u32(csr, &out->fp));
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->seq));
+    out->pay_len = cursor_take_remaining(csr, out->pay);
+
+    return lfe_dg_parse_res_ok;
 }
 
 
@@ -99,6 +106,18 @@ lfe_dg_frame_data__parse(struct lfe_dg_frame_data * out,
     enum lfe_dg_parse_res res = lfe_dg_parse_res_ok;
     assert(res == lfe_dg_parse_res_ok);
     return res;
+}
+
+
+struct lfe_dg_monolithic_flags
+lfe_dg_monolithic_flags__parse(uint8_t flag_bits) {
+    return (struct lfe_dg_monolithic_flags){
+        .downlink   = ((flag_bits >> 0) & 1) == 1,
+        .should_ack = ((flag_bits >> 1) & 1) == 1,
+        .cts_rts    = ((flag_bits >> 2) & 1) == 1,
+        .priority   = ((flag_bits >> 3) & 1) == 1,
+        .ldpc       = ((flag_bits >> 4) & 1) == 1,
+    };
 }
 
 

@@ -111,6 +111,8 @@ struct lfe_dg_monolithic {
     uint32_t fp;
     /** Sequence number. */
     uint32_t seq;
+    /** Length (not capacity) of following payload. */
+    size_t pay_len;
     /** Data payload. */
     uint8_t pay[CONSTANTS_MAX_PAY_LEN];
 };
@@ -259,6 +261,13 @@ lfe_dg_frame_data__parse(struct lfe_dg_frame_data * out,
 enum lfe_dg_parse_res
 lfe_dg_hdr__parse(struct lfe_dg_hdr * out, struct cursor * csr);
 
+
+struct lfe_dg_monolithic_flags
+lfe_dg_monolithic_flags__parse(uint8_t flag_bits);
+
+
+struct lfe_dg_ack_flags
+lfe_dg_ack_flags__parse(uint8_t flag_bits);
 
 
 /** @} */
