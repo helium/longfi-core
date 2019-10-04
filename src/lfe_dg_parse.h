@@ -222,9 +222,35 @@ lfe_dg__parse(struct lfe_dg_parsed * out, struct cursor * csr);
  */
 enum lfe_dg_parse_res
 lfe_dg_monolithic__parse(struct lfe_dg_monolithic * out,
-                         struct cursor *            csr,
-                         size_t                     pay_len,
-                         struct lfe_dg_hdr          hdr);
+                         struct lfe_dg_hdr          hdr,
+                         struct cursor *            csr);
+
+
+/**
+ * Parses a `ack` datagram.
+ */
+enum lfe_dg_parse_res
+lfe_dg_ack__parse(struct lfe_dg_ack * out,
+                  struct lfe_dg_hdr   hdr,
+                  struct cursor *     csr);
+
+
+/**
+ * Parses a `frame_start` datagram.
+ */
+enum lfe_dg_parse_res
+lfe_dg_frame_start__parse(struct lfe_dg_frame_start * out,
+                          struct lfe_dg_hdr           hdr,
+                          struct cursor *             csr);
+
+
+/**
+ * Parses a `frame_data` datagram.
+ */
+enum lfe_dg_parse_res
+lfe_dg_frame_data__parse(struct lfe_dg_frame_data * out,
+                         struct lfe_dg_hdr          hdr,
+                         struct cursor *            csr);
 
 
 /**
@@ -232,6 +258,7 @@ lfe_dg_monolithic__parse(struct lfe_dg_monolithic * out,
  */
 enum lfe_dg_parse_res
 lfe_dg_hdr__parse(struct lfe_dg_hdr * out, struct cursor * csr);
+
 
 
 /** @} */

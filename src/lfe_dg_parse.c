@@ -3,10 +3,20 @@
 #include <assert.h>
 #include <stdbool.h>
 
-#define CSR_RES(_eXpr_)                                                        \
+#define CSR_RES(eXpr_)                                                         \
     do {                                                                       \
-        if (cursor_res_err_buf_exhausted == (_eXpr_)) {                        \
+        enum cursor_res vAl_ = (eXpr_);                                        \
+        if (cursor_res_err_buf_exhausted == (vAl_)) {                          \
             return lfe_dg_parse_res_err_nomem;                                 \
+        }                                                                      \
+        assert(vAl_ == cursor_res_ok);                                         \
+    } while (0)
+
+#define LFE_RES(eXpr_)                                                         \
+    do {                                                                       \
+        enum lfe_dg_parse_res vAl_ = (eXpr_);                                  \
+        if (vAl_ != lfe_dg_parse_res_ok) {                                     \
+            return res;                                                        \
         }                                                                      \
     } while (0)
 
@@ -15,7 +25,80 @@
 
 enum lfe_dg_parse_res
 lfe_dg__parse(struct lfe_dg_parsed * out, struct cursor * csr) {
-    return lfe_dg_parse_res_ok;
+    enum lfe_dg_parse_res res;
+    struct lfe_dg_hdr     hdr;
+
+    res = lfe_dg_hdr__parse(&hdr, csr);
+    LFE_RES(res);
+
+    switch (hdr.type) {
+    case lfe_dg_type_monolithic:
+        res = lfe_dg_monolithic__parse(&out->monolithic, hdr, csr);
+        LFE_RES(res);
+        break;
+
+    case lfe_dg_type_ack:
+        res = lfe_dg_ack__parse(&out->ack, hdr, csr);
+        LFE_RES(res);
+        break;
+
+    case lfe_dg_type_frame_start:
+        res = lfe_dg_frame_start__parse(&out->frame_start, hdr, csr);
+        LFE_RES(res);
+        break;
+
+    case lfe_dg_type_frame_data:
+        res = lfe_dg_frame_data__parse(&out->frame_data, hdr, csr);
+        LFE_RES(res);
+        break;
+    };
+
+    assert(res == lfe_dg_parse_res_ok);
+    return res;
+}
+
+
+enum lfe_dg_parse_res
+lfe_dg_monolithic__parse(struct lfe_dg_monolithic * out,
+                         struct lfe_dg_hdr          hdr,
+                         struct cursor *            csr) {
+    assert(hdr.type = lfe_dg_type_monolithic);
+    enum lfe_dg_parse_res res = lfe_dg_parse_res_ok;
+    assert(res == lfe_dg_parse_res_ok);
+    return res;
+}
+
+
+enum lfe_dg_parse_res
+lfe_dg_ack__parse(struct lfe_dg_ack * out,
+                  struct lfe_dg_hdr   hdr,
+                  struct cursor *     csr) {
+    assert(hdr.type = lfe_dg_type_ack);
+    enum lfe_dg_parse_res res = lfe_dg_parse_res_ok;
+    assert(res == lfe_dg_parse_res_ok);
+    return res;
+}
+
+
+enum lfe_dg_parse_res
+lfe_dg_frame_start__parse(struct lfe_dg_frame_start * out,
+                          struct lfe_dg_hdr           hdr,
+                          struct cursor *             csr) {
+    assert(hdr.type = lfe_dg_type_frame_start);
+    enum lfe_dg_parse_res res = lfe_dg_parse_res_ok;
+    assert(res == lfe_dg_parse_res_ok);
+    return res;
+}
+
+
+enum lfe_dg_parse_res
+lfe_dg_frame_data__parse(struct lfe_dg_frame_data * out,
+                         struct lfe_dg_hdr          hdr,
+                         struct cursor *            csr) {
+    assert(hdr.type = lfe_dg_type_frame_data);
+    enum lfe_dg_parse_res res = lfe_dg_parse_res_ok;
+    assert(res == lfe_dg_parse_res_ok);
+    return res;
 }
 
 
@@ -62,9 +145,8 @@ lfe_dg_hdr__parse(struct lfe_dg_hdr * out, struct cursor * csr) {
         .flag_bits = dg_flags_bits,
     };
 
-    if ((res = lfe_dg_type__parse(&out->type, dg_type_bits))) {
-        return res;
-    }
+    res = lfe_dg_type__parse(&out->type, dg_type_bits);
+    LFE_RES(res);
 
     return lfe_dg_parse_res_ok;
 }
