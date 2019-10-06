@@ -1,6 +1,7 @@
 add_library(lfe
   lfe.c
   lfe_dg_des.c
+  lfe_dg_ser.c
   )
 
 target_link_libraries(lfe
