@@ -117,7 +117,12 @@ struct lfe_dg_monolithic {
  * appear at the end of this Datagram.
  */
 struct lfe_dg_frame_start {
-    /** Datagram flags. */
+    /**
+     * Datagram flags.
+     *
+     * `should_ack` and `cts_rts` should take effect after all the
+     * subsequent Frame Data datagrams have been sent.
+     */
     struct lfe_dg_frame_start_flags {
         /**
          * This packet is destined for a Device if this bit is set.
@@ -153,6 +158,8 @@ struct lfe_dg_frame_start {
     uint32_t did;
     /** Fingerprint. */
     uint32_t fp;
+    /** Sequence number. */
+    uint32_t seq;
     /** Fragment count. */
     uint32_t fragments;
     /** Length (not capacity) of following payload. */
@@ -171,7 +178,35 @@ struct lfe_dg_frame_start {
  * between frames, but it is not needed to transmit it. The fragment
  * number is used to determine the ordering of the payload fragments.
  */
-struct lfe_dg_frame_data {};
+struct lfe_dg_frame_data {
+    /**
+     * Datagram flags.
+     *
+     * `should_ack` and `cts_rts` should take effect after all the
+     * subsequent Frame Data datagrams have been sent.
+     */
+    struct lfe_dg_frame_data_flags {
+        /**
+         * The packet, beyond the Tag field, is encoded with a Low
+         * Density Parity Code. The specific code used depends on the
+         * maximum datagram size for the current region and spreading
+         * factor.
+         */
+        bool ldpc;
+    } flags;
+    /** Organization ID. */
+    uint32_t oui;
+    /** Device ID. */
+    uint32_t did;
+    /** Fingerprint. */
+    uint32_t fp;
+    /** Fragment number. */
+    uint32_t fragment;
+    /** Length (not capacity) of following payload. */
+    size_t pay_len;
+    /** Data payload. */
+    uint8_t pay[CONSTANTS_MAX_PAY_LEN];
+};
 
 
 /**
@@ -219,6 +254,18 @@ struct lfe_dg_ack {
          */
         bool ldpc;
     } flags;
+    /** Organization ID. */
+    uint32_t oui;
+    /** Device ID. */
+    uint32_t did;
+    /** Fingerprint. */
+    uint32_t fp;
+    /** Sequence number. */
+    uint32_t seq;
+    /** Length (not capacity) of following payload. */
+    size_t pay_len;
+    /** Data payload. */
+    uint8_t pay[CONSTANTS_MAX_PAY_LEN];
 };
 
 

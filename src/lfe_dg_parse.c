@@ -81,9 +81,15 @@ lfe_dg_ack__parse(struct lfe_dg_ack * out,
                   struct lfe_dg_hdr   hdr,
                   struct cursor *     csr) {
     assert(hdr.type = lfe_dg_type_ack);
-    enum lfe_dg_parse_res res = lfe_dg_parse_res_ok;
-    assert(res == lfe_dg_parse_res_ok);
-    return res;
+
+    out->flags = lfe_dg_ack_flags__parse(hdr.flag_bits);
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->oui));
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->did));
+    CSR_RES(cursor_unpack_le_u32(csr, &out->fp));
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->seq));
+    out->pay_len = cursor_take_remaining(csr, out->pay);
+
+    return lfe_dg_parse_res_ok;
 }
 
 
@@ -92,9 +98,16 @@ lfe_dg_frame_start__parse(struct lfe_dg_frame_start * out,
                           struct lfe_dg_hdr           hdr,
                           struct cursor *             csr) {
     assert(hdr.type = lfe_dg_type_frame_start);
-    enum lfe_dg_parse_res res = lfe_dg_parse_res_ok;
-    assert(res == lfe_dg_parse_res_ok);
-    return res;
+
+    out->flags = lfe_dg_frame_start_flags__parse(hdr.flag_bits);
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->oui));
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->did));
+    CSR_RES(cursor_unpack_le_u32(csr, &out->fp));
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->seq));
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->fragments));
+    out->pay_len = cursor_take_remaining(csr, out->pay);
+
+    return lfe_dg_parse_res_ok;
 }
 
 
@@ -103,9 +116,15 @@ lfe_dg_frame_data__parse(struct lfe_dg_frame_data * out,
                          struct lfe_dg_hdr          hdr,
                          struct cursor *            csr) {
     assert(hdr.type = lfe_dg_type_frame_data);
-    enum lfe_dg_parse_res res = lfe_dg_parse_res_ok;
-    assert(res == lfe_dg_parse_res_ok);
-    return res;
+
+    out->flags = lfe_dg_frame_data_flags__parse(hdr.flag_bits);
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->oui));
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->did));
+    CSR_RES(cursor_unpack_le_u32(csr, &out->fp));
+    CSR_RES(cursor_unpack_var_le_u32(csr, &out->fragment));
+    out->pay_len = cursor_take_remaining(csr, out->pay);
+
+    return lfe_dg_parse_res_ok;
 }
 
 
@@ -117,6 +136,26 @@ lfe_dg_monolithic_flags__parse(uint8_t flag_bits) {
         .cts_rts    = ((flag_bits >> 2) & 1) == 1,
         .priority   = ((flag_bits >> 3) & 1) == 1,
         .ldpc       = ((flag_bits >> 4) & 1) == 1,
+    };
+}
+
+
+struct lfe_dg_frame_start_flags
+lfe_dg_frame_start_flags__parse(uint8_t flag_bits) {
+    return (struct lfe_dg_frame_start_flags){
+        .downlink   = ((flag_bits >> 0) & 1) == 1,
+        .should_ack = ((flag_bits >> 1) & 1) == 1,
+        .cts_rts    = ((flag_bits >> 2) & 1) == 1,
+        .priority   = ((flag_bits >> 3) & 1) == 1,
+        .ldpc       = ((flag_bits >> 4) & 1) == 1,
+    };
+}
+
+
+struct lfe_dg_frame_data_flags
+lfe_dg_frame_data_flags__parse(uint8_t flag_bits) {
+    return (struct lfe_dg_frame_data_flags){
+        .ldpc = (flag_bits & 1) == 1,
     };
 }
 

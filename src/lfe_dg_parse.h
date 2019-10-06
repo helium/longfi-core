@@ -112,6 +112,14 @@ struct lfe_dg_monolithic_flags
 lfe_dg_monolithic_flags__parse(uint8_t flag_bits);
 
 
+struct lfe_dg_frame_start_flags
+lfe_dg_frame_start_flags__parse(uint8_t flag_bits);
+
+
+struct lfe_dg_frame_data_flags
+lfe_dg_frame_data_flags__parse(uint8_t flag_bits);
+
+
 struct lfe_dg_ack_flags
 lfe_dg_ack_flags__parse(uint8_t flag_bits);
 
