@@ -1,6 +1,7 @@
 add_library(lfc
   lfc.c
   lfc_dg_des.c
+  lfc_dg_eq.c
   lfc_dg_ser.c
   )
 

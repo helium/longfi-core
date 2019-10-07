@@ -1,6 +1,7 @@
 #include "greatest/greatest.h"
 #include "lfc/datagram.h"
 #include "lfc_dg_des.h"
+#include "lfc_dg_eq.h"
 #include "lfc_dg_ser.h"
 #include <assert.h>
 #include <limits.h>
@@ -109,7 +110,7 @@ gen_frame_data(struct lfc_dg_frame_data * out) {
         enum lfc_dg_des_res dres = lfc_dg__des(&deserialized, &csr_des);       \
         ASSERT_EQ(lfc_dg_ser_res_ok, dres);                                    \
         ASSERT_EQ_FMT(lfc_dg_type_##DG_TYPE, deserialized.type, "%x");         \
-        ASSERT_EQ_FMT(REF.pay_len, deserialized.DG_TYPE.pay_len, "%d");        \
+        ASSERT(lfc_dg_##DG_TYPE##__eq(&REF, &deserialized.DG_TYPE));           \
                                                                                \
         /* Reserialize. */                                                     \
         uint8_t       buf_reser[1024];                                         \
