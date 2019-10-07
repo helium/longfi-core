@@ -20,9 +20,9 @@ extern "C" {
 
 
 /** Constants */
-enum CONSTANTS {
+enum LFE_DG_CONSTANTS {
     /** Max supported datagram payload length. */
-    CONSTANTS_MAX_PAY_LEN = 128,
+    LFE_DG_CONSTANTS_MAX_PAY_LEN = 128,
 };
 
 
@@ -104,7 +104,7 @@ struct lfe_dg_monolithic {
     /** Length (not capacity) of following payload. */
     size_t pay_len;
     /** Data payload. */
-    uint8_t pay[CONSTANTS_MAX_PAY_LEN];
+    uint8_t pay[LFE_DG_CONSTANTS_MAX_PAY_LEN];
 };
 
 
@@ -165,7 +165,7 @@ struct lfe_dg_frame_start {
     /** Length (not capacity) of following payload. */
     size_t pay_len;
     /** Data payload. */
-    uint8_t pay[CONSTANTS_MAX_PAY_LEN];
+    uint8_t pay[LFE_DG_CONSTANTS_MAX_PAY_LEN];
 };
 
 
@@ -205,7 +205,7 @@ struct lfe_dg_frame_data {
     /** Length (not capacity) of following payload. */
     size_t pay_len;
     /** Data payload. */
-    uint8_t pay[CONSTANTS_MAX_PAY_LEN];
+    uint8_t pay[LFE_DG_CONSTANTS_MAX_PAY_LEN];
 };
 
 
@@ -265,7 +265,7 @@ struct lfe_dg_ack {
     /** Length (not capacity) of following payload. */
     size_t pay_len;
     /** Data payload. */
-    uint8_t pay[CONSTANTS_MAX_PAY_LEN];
+    uint8_t pay[LFE_DG_CONSTANTS_MAX_PAY_LEN];
 };
 
 
