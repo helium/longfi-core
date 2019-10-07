@@ -2,7 +2,6 @@
 # Project Setup                                                          #
 ##########################################################################
 cmake_minimum_required(VERSION 3.11)
-enable_testing()
 
 project(LongFiCore
   VERSION   1.0
@@ -12,6 +11,7 @@ project(LongFiCore
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+include(CTest)
 
 ##########################################################################
 # Local                                                                  #

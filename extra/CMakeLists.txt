@@ -1,3 +1,6 @@
 add_subdirectory(cursor_varint)
 add_subdirectory(golay)
-add_subdirectory(greatest)
+
+if(${BUILD_TESTING})
+  add_subdirectory(greatest)
+endif(${BUILD_TESTING})

@@ -1,4 +1,5 @@
-add_executable(test_golay test_golay.c)
-target_link_libraries(test_golay golay greatest)
-
-add_test(NAME test_golay COMMAND test_golay)
+if(${BUILD_TESTING})
+  add_executable(test_golay test_golay.c)
+  target_link_libraries(test_golay golay greatest)
+  add_test(NAME test_golay COMMAND test_golay)
+endif(${BUILD_TESTING})

@@ -12,6 +12,8 @@ target_include_directories(lfc
   PUBLIC ${CMAKE_SOURCE_DIR}/include
   )
 
-add_executable(test_serdes test_serdes.c)
-target_link_libraries(test_serdes lfc cursor greatest)
-add_test(NAME test_serdes COMMAND test_serdes)
+if(${BUILD_TESTING})
+  add_executable(test_serdes test_serdes.c)
+  target_link_libraries(test_serdes lfc cursor greatest)
+  add_test(NAME test_serdes COMMAND test_serdes)
+endif(${BUILD_TESTING})

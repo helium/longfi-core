@@ -4,13 +4,13 @@
 
 1. Generate makefile in `build/`. You only need to do this once.
    ```
-   cmake -H. -Bbuild
+   cmake -H. -Bbuild -DBUILD_TESTING=ON
    ```
 1. Compile
    ```
    make -C build
    ```
-1. Test
+1. Test (not applicable if configured with `-DBUILD_TESTING=OFF` in step 1)
    ```
    make -C build test
    ```
