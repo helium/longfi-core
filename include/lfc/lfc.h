@@ -1,5 +1,5 @@
-#ifndef LFE_0ED159C6
-#define LFE_0ED159C6
+#ifndef LFC_314C7FBF
+#define LFC_314C7FBF
 
 /**
  * @file
@@ -19,24 +19,22 @@ extern "C" {
  * LongFi users are responsible for configuring their devices' region
  * in order to remain compliant with regulations.
  */
-enum lfe_region {
+enum lfc_region {
     /** USA */
-    lfe_region_fcc,
+    lfc_region_fcc,
 };
 
 /**
- * LongFi engine user configuration.
+ * LongFi user configuration.
  */
-struct lfe_user_cfg {};
+struct lfc_user_cfg {};
 
 /**
- * LongFi engine context.
- *
- * More
+ * LongFi context.
  */
-struct lfe {
+struct lfc {
     /** User-provided configuration. */
-    struct lfe_user_cfg cfg;
+    struct lfc_user_cfg cfg;
 };
 
 /**
@@ -46,7 +44,7 @@ struct lfe {
  * susceptible to errors, where as large spreading factors are more
  * tolerant to noise but are slow to transmit.
  */
-enum lfe_sf {
+enum lfc_sf {
     sf_5  = 5,
     sf_6  = 6,
     sf_7  = 7,
@@ -58,26 +56,26 @@ enum lfe_sf {
 };
 
 /**
- * Initializes a user-provided `lfe` object.
+ * Initializes a user-provided `lfc` object.
  */
 void
-lfe_init(struct lfe const * lfe);
+lfc_init(struct lfc const * lfc);
 
 /**
- * Push a received payload into the engine.
+ * Push a received payload into the context.
  */
 void
-lfe_push_rx(struct lfe const * lfe, uint8_t const * pay, size_t pay_len);
+lfc_push_rx(struct lfc const * lfc, uint8_t const * pay, size_t pay_len);
 
 /**
  * Initializes and returns a transmit plan.
  */
 void
-lfe_transmit(struct lfe const * lfe, uint8_t const * pay, size_t pay_len);
+lfc_transmit(struct lfc const * lfc, uint8_t const * pay, size_t pay_len);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* LFE_0ED159C6 */
+#endif /* LFC_314C7FBF */

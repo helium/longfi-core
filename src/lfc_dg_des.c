@@ -1,4 +1,4 @@
-#include "lfe_dg_des.h"
+#include "lfc_dg_des.h"
 #include "cursor/varint.h"
 #include "golay/golay.h"
 #include <assert.h>
@@ -8,15 +8,15 @@
     do {                                                                       \
         enum cursor_res vAl_ = (eXpr_);                                        \
         if (cursor_res_err_buf_exhausted == (vAl_)) {                          \
-            return lfe_dg_des_res_err_nomem;                                   \
+            return lfc_dg_des_res_err_nomem;                                   \
         }                                                                      \
         assert(vAl_ == cursor_res_ok);                                         \
     } while (0)
 
-#define LFE_RES(eXpr_)                                                         \
+#define LFC_RES(eXpr_)                                                         \
     do {                                                                       \
-        enum lfe_dg_des_res vAl_ = (eXpr_);                                    \
-        if (vAl_ != lfe_dg_des_res_ok) {                                       \
+        enum lfc_dg_des_res vAl_ = (eXpr_);                                    \
+        if (vAl_ != lfc_dg_des_res_ok) {                                       \
             return res;                                                        \
         }                                                                      \
     } while (0)
@@ -24,84 +24,84 @@
 
 
 
-enum lfe_dg_des_res
-lfe_dg__des(struct lfe_dg_des * out, struct cursor * csr) {
-    enum lfe_dg_des_res res;
-    struct lfe_dg_hdr   hdr;
+enum lfc_dg_des_res
+lfc_dg__des(struct lfc_dg_des * out, struct cursor * csr) {
+    enum lfc_dg_des_res res;
+    struct lfc_dg_hdr   hdr;
 
-    res = lfe_dg_hdr__des(&hdr, csr);
-    LFE_RES(res);
+    res = lfc_dg_hdr__des(&hdr, csr);
+    LFC_RES(res);
 
     switch (hdr.type) {
-    case lfe_dg_type_monolithic:
-        res = lfe_dg_monolithic__des(&out->monolithic, hdr, csr);
-        LFE_RES(res);
+    case lfc_dg_type_monolithic:
+        res = lfc_dg_monolithic__des(&out->monolithic, hdr, csr);
+        LFC_RES(res);
         break;
 
-    case lfe_dg_type_ack:
-        res = lfe_dg_ack__des(&out->ack, hdr, csr);
-        LFE_RES(res);
+    case lfc_dg_type_ack:
+        res = lfc_dg_ack__des(&out->ack, hdr, csr);
+        LFC_RES(res);
         break;
 
-    case lfe_dg_type_frame_start:
-        res = lfe_dg_frame_start__des(&out->frame_start, hdr, csr);
-        LFE_RES(res);
+    case lfc_dg_type_frame_start:
+        res = lfc_dg_frame_start__des(&out->frame_start, hdr, csr);
+        LFC_RES(res);
         break;
 
-    case lfe_dg_type_frame_data:
-        res = lfe_dg_frame_data__des(&out->frame_data, hdr, csr);
-        LFE_RES(res);
+    case lfc_dg_type_frame_data:
+        res = lfc_dg_frame_data__des(&out->frame_data, hdr, csr);
+        LFC_RES(res);
         break;
     };
 
     out->type = hdr.type;
 
-    assert(res == lfe_dg_des_res_ok);
+    assert(res == lfc_dg_des_res_ok);
     return res;
 }
 
 
-enum lfe_dg_des_res
-lfe_dg_monolithic__des(struct lfe_dg_monolithic * out,
-                       struct lfe_dg_hdr          hdr,
+enum lfc_dg_des_res
+lfc_dg_monolithic__des(struct lfc_dg_monolithic * out,
+                       struct lfc_dg_hdr          hdr,
                        struct cursor *            csr) {
-    assert(hdr.type == lfe_dg_type_monolithic);
+    assert(hdr.type == lfc_dg_type_monolithic);
 
-    out->flags = lfe_dg_monolithic_flags__des(hdr.flag_bits);
+    out->flags = lfc_dg_monolithic_flags__des(hdr.flag_bits);
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->oui));
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->did));
     CSR_RES(cursor_unpack_le_u32(csr, &out->fp));
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->seq));
     out->pay_len = cursor_take_remaining(csr, out->pay);
 
-    return lfe_dg_des_res_ok;
+    return lfc_dg_des_res_ok;
 }
 
 
-enum lfe_dg_des_res
-lfe_dg_ack__des(struct lfe_dg_ack * out,
-                struct lfe_dg_hdr   hdr,
+enum lfc_dg_des_res
+lfc_dg_ack__des(struct lfc_dg_ack * out,
+                struct lfc_dg_hdr   hdr,
                 struct cursor *     csr) {
-    assert(hdr.type == lfe_dg_type_ack);
+    assert(hdr.type == lfc_dg_type_ack);
 
-    out->flags = lfe_dg_ack_flags__des(hdr.flag_bits);
+    out->flags = lfc_dg_ack_flags__des(hdr.flag_bits);
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->oui));
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->did));
     CSR_RES(cursor_unpack_le_u32(csr, &out->fp));
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->seq));
     out->pay_len = cursor_take_remaining(csr, out->pay);
 
-    return lfe_dg_des_res_ok;
+    return lfc_dg_des_res_ok;
 }
 
 
-enum lfe_dg_des_res
-lfe_dg_frame_start__des(struct lfe_dg_frame_start * out,
-                        struct lfe_dg_hdr           hdr,
+enum lfc_dg_des_res
+lfc_dg_frame_start__des(struct lfc_dg_frame_start * out,
+                        struct lfc_dg_hdr           hdr,
                         struct cursor *             csr) {
-    assert(hdr.type == lfe_dg_type_frame_start);
+    assert(hdr.type == lfc_dg_type_frame_start);
 
-    out->flags = lfe_dg_frame_start_flags__des(hdr.flag_bits);
+    out->flags = lfc_dg_frame_start_flags__des(hdr.flag_bits);
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->oui));
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->did));
     CSR_RES(cursor_unpack_le_u32(csr, &out->fp));
@@ -109,30 +109,30 @@ lfe_dg_frame_start__des(struct lfe_dg_frame_start * out,
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->fragments));
     out->pay_len = cursor_take_remaining(csr, out->pay);
 
-    return lfe_dg_des_res_ok;
+    return lfc_dg_des_res_ok;
 }
 
 
-enum lfe_dg_des_res
-lfe_dg_frame_data__des(struct lfe_dg_frame_data * out,
-                       struct lfe_dg_hdr          hdr,
+enum lfc_dg_des_res
+lfc_dg_frame_data__des(struct lfc_dg_frame_data * out,
+                       struct lfc_dg_hdr          hdr,
                        struct cursor *            csr) {
-    assert(hdr.type == lfe_dg_type_frame_data);
+    assert(hdr.type == lfc_dg_type_frame_data);
 
-    out->flags = lfe_dg_frame_data_flags__des(hdr.flag_bits);
+    out->flags = lfc_dg_frame_data_flags__des(hdr.flag_bits);
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->oui));
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->did));
     CSR_RES(cursor_unpack_le_u32(csr, &out->fp));
     CSR_RES(cursor_unpack_var_le_u32(csr, &out->fragment));
     out->pay_len = cursor_take_remaining(csr, out->pay);
 
-    return lfe_dg_des_res_ok;
+    return lfc_dg_des_res_ok;
 }
 
 
-struct lfe_dg_monolithic_flags
-lfe_dg_monolithic_flags__des(uint8_t flag_bits) {
-    return (struct lfe_dg_monolithic_flags){
+struct lfc_dg_monolithic_flags
+lfc_dg_monolithic_flags__des(uint8_t flag_bits) {
+    return (struct lfc_dg_monolithic_flags){
         .downlink   = ((flag_bits >> 0) & 1) == 1,
         .should_ack = ((flag_bits >> 1) & 1) == 1,
         .cts_rts    = ((flag_bits >> 2) & 1) == 1,
@@ -142,9 +142,9 @@ lfe_dg_monolithic_flags__des(uint8_t flag_bits) {
 }
 
 
-struct lfe_dg_frame_start_flags
-lfe_dg_frame_start_flags__des(uint8_t flag_bits) {
-    return (struct lfe_dg_frame_start_flags){
+struct lfc_dg_frame_start_flags
+lfc_dg_frame_start_flags__des(uint8_t flag_bits) {
+    return (struct lfc_dg_frame_start_flags){
         .downlink   = ((flag_bits >> 0) & 1) == 1,
         .should_ack = ((flag_bits >> 1) & 1) == 1,
         .cts_rts    = ((flag_bits >> 2) & 1) == 1,
@@ -154,17 +154,17 @@ lfe_dg_frame_start_flags__des(uint8_t flag_bits) {
 }
 
 
-struct lfe_dg_frame_data_flags
-lfe_dg_frame_data_flags__des(uint8_t flag_bits) {
-    return (struct lfe_dg_frame_data_flags){
+struct lfc_dg_frame_data_flags
+lfc_dg_frame_data_flags__des(uint8_t flag_bits) {
+    return (struct lfc_dg_frame_data_flags){
         .ldpc = (flag_bits & 1) == 1,
     };
 }
 
 
-struct lfe_dg_ack_flags
-lfe_dg_ack_flags__des(uint8_t flag_bits) {
-    return (struct lfe_dg_ack_flags){
+struct lfc_dg_ack_flags
+lfc_dg_ack_flags__des(uint8_t flag_bits) {
+    return (struct lfc_dg_ack_flags){
         .failure         = ((flag_bits >> 0) & 1) == 1,
         .session_expired = ((flag_bits >> 1) & 1) == 1,
         .cts_rts         = ((flag_bits >> 2) & 1) == 1,
@@ -174,19 +174,19 @@ lfe_dg_ack_flags__des(uint8_t flag_bits) {
 }
 
 
-enum lfe_dg_des_res
-lfe_dg_type__des(enum lfe_dg_type * out, uint8_t type_bits) {
-    if (type_bits == 0 || type_bits > lfe_dg_type_ack) {
-        return lfe_dg_des_res_invalid_type;
+enum lfc_dg_des_res
+lfc_dg_type__des(enum lfc_dg_type * out, uint8_t type_bits) {
+    if (type_bits == 0 || type_bits > lfc_dg_type_ack) {
+        return lfc_dg_des_res_invalid_type;
     }
-    *out = (enum lfe_dg_type)type_bits;
-    return lfe_dg_des_res_ok;
+    *out = (enum lfc_dg_type)type_bits;
+    return lfc_dg_des_res_ok;
 }
 
 
-enum lfe_dg_des_res
-lfe_dg_hdr__des(struct lfe_dg_hdr * out, struct cursor * csr) {
-    enum lfe_dg_des_res res;
+enum lfc_dg_des_res
+lfc_dg_hdr__des(struct lfc_dg_hdr * out, struct cursor * csr) {
+    enum lfc_dg_des_res res;
 
     uint16_t dec_hdr_bits;
     uint8_t  enc_hdr_bits[3];
@@ -200,13 +200,13 @@ lfe_dg_hdr__des(struct lfe_dg_hdr * out, struct cursor * csr) {
     /* We're not handling extended tags yet. */
     assert(!dg_extended_bit);
 
-    *out = (struct lfe_dg_hdr){
+    *out = (struct lfc_dg_hdr){
         .bit_errs  = dec_bit_errs,
         .flag_bits = dg_flags_bits,
     };
 
-    res = lfe_dg_type__des(&out->type, dg_type_bits);
-    LFE_RES(res);
+    res = lfc_dg_type__des(&out->type, dg_type_bits);
+    LFC_RES(res);
 
-    return lfe_dg_des_res_ok;
+    return lfc_dg_des_res_ok;
 }

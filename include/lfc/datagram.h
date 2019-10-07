@@ -20,37 +20,37 @@ extern "C" {
 
 
 /** Constants */
-enum LFE_DG_CONSTANTS {
+enum LFC_DG_CONSTANTS {
     /** Max supported datagram payload length. */
-    LFE_DG_CONSTANTS_MAX_PAY_LEN = 128,
+    LFC_DG_CONSTANTS_MAX_PAY_LEN = 128,
 };
 
 
 /**
  * The type (or variant) of datagram.
  */
-enum lfe_dg_type {
+enum lfc_dg_type {
     /** Monolithic. */
-    lfe_dg_type_monolithic = 1,
+    lfc_dg_type_monolithic = 1,
     /** Start of Frame. */
-    lfe_dg_type_frame_start = 2,
+    lfc_dg_type_frame_start = 2,
     /** Frame Data. */
-    lfe_dg_type_frame_data = 3,
+    lfc_dg_type_frame_data = 3,
     /** Ack. */
-    lfe_dg_type_ack = 4,
+    lfc_dg_type_ack = 4,
 };
 
 
 /**
  * The result of parsing the golay-encoded header.
  */
-struct lfe_dg_hdr {
+struct lfc_dg_hdr {
     /** Number of corrected bit errors. */
     int bit_errs;
     /** Unparsed flags bits. */
     uint8_t flag_bits;
     /** This datagram's type */
-    enum lfe_dg_type type;
+    enum lfc_dg_type type;
 };
 
 
@@ -62,9 +62,9 @@ struct lfe_dg_hdr {
  * or receiving small amounts of data, a Monolithic Datagram should be
  * used.
  */
-struct lfe_dg_monolithic {
+struct lfc_dg_monolithic {
     /** Datagram flags. */
-    struct lfe_dg_monolithic_flags {
+    struct lfc_dg_monolithic_flags {
         /**
          * This packet is destined for a Device if this bit is set.
          */
@@ -104,7 +104,7 @@ struct lfe_dg_monolithic {
     /** Length (not capacity) of following payload. */
     size_t pay_len;
     /** Data payload. */
-    uint8_t pay[LFE_DG_CONSTANTS_MAX_PAY_LEN];
+    uint8_t pay[LFC_DG_CONSTANTS_MAX_PAY_LEN];
 };
 
 
@@ -116,14 +116,14 @@ struct lfe_dg_monolithic {
  * can hold. In some cases, if there's room, some of the payload may
  * appear at the end of this Datagram.
  */
-struct lfe_dg_frame_start {
+struct lfc_dg_frame_start {
     /**
      * Datagram flags.
      *
      * `should_ack` and `cts_rts` should take effect after all the
      * subsequent Frame Data datagrams have been sent.
      */
-    struct lfe_dg_frame_start_flags {
+    struct lfc_dg_frame_start_flags {
         /**
          * This packet is destined for a Device if this bit is set.
          */
@@ -165,7 +165,7 @@ struct lfe_dg_frame_start {
     /** Length (not capacity) of following payload. */
     size_t pay_len;
     /** Data payload. */
-    uint8_t pay[LFE_DG_CONSTANTS_MAX_PAY_LEN];
+    uint8_t pay[LFC_DG_CONSTANTS_MAX_PAY_LEN];
 };
 
 
@@ -178,14 +178,14 @@ struct lfe_dg_frame_start {
  * between frames, but it is not needed to transmit it. The fragment
  * number is used to determine the ordering of the payload fragments.
  */
-struct lfe_dg_frame_data {
+struct lfc_dg_frame_data {
     /**
      * Datagram flags.
      *
      * `should_ack` and `cts_rts` should take effect after all the
      * subsequent Frame Data datagrams have been sent.
      */
-    struct lfe_dg_frame_data_flags {
+    struct lfc_dg_frame_data_flags {
         /**
          * The packet, beyond the Tag field, is encoded with a Low
          * Density Parity Code. The specific code used depends on the
@@ -205,7 +205,7 @@ struct lfe_dg_frame_data {
     /** Length (not capacity) of following payload. */
     size_t pay_len;
     /** Data payload. */
-    uint8_t pay[LFE_DG_CONSTANTS_MAX_PAY_LEN];
+    uint8_t pay[LFC_DG_CONSTANTS_MAX_PAY_LEN];
 };
 
 
@@ -217,11 +217,11 @@ struct lfe_dg_frame_data {
  * Should ACK flag set. The Ack datagram can indicate success or
  * failure and request retransmits.
  */
-struct lfe_dg_ack {
+struct lfc_dg_ack {
     /**
      * Ack-specific flags.
      */
-    struct lfe_dg_ack_flags {
+    struct lfc_dg_ack_flags {
         /**
          * The receiver was unable to receive the previous message.
          */
@@ -265,7 +265,7 @@ struct lfe_dg_ack {
     /** Length (not capacity) of following payload. */
     size_t pay_len;
     /** Data payload. */
-    uint8_t pay[LFE_DG_CONSTANTS_MAX_PAY_LEN];
+    uint8_t pay[LFC_DG_CONSTANTS_MAX_PAY_LEN];
 };
 
 
