@@ -1,4 +1,4 @@
-# LongFi Engine
+# LongFi Core
 
 ## Building
 

@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.11)
 enable_testing()
 
-project(LongFi
+project(LongFiCore
   VERSION   1.0
   LANGUAGES C
   )
