@@ -14,3 +14,8 @@
    ```
    make -C build test
    ```
+1. Documentation
+   ```
+   make -C build docs
+   open build/docs/html/index.html
+   ```

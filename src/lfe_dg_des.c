@@ -54,6 +54,8 @@ lfe_dg__des(struct lfe_dg_des * out, struct cursor * csr) {
         break;
     };
 
+    out->type = hdr.type;
+
     assert(res == lfe_dg_des_res_ok);
     return res;
 }
