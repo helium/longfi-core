@@ -10,7 +10,7 @@ target_link_libraries(lfc
   )
 
 target_include_directories(lfc
-	PUBLIC ${PROJECT_SOURCE_DIR}/include
+  PUBLIC ${PROJECT_SOURCE_DIR}/include
   )
 
 if(${BUILD_TESTING})
