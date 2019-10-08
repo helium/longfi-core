@@ -1,3 +1,4 @@
+add_subdirectory(blake2)
 add_subdirectory(cursor_varint)
 add_subdirectory(golay)
 
