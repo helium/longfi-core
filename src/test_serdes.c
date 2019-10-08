@@ -1,8 +1,8 @@
 #include "greatest/greatest.h"
 #include "lfc/datagram.h"
-#include "lfc_dg_des.h"
-#include "lfc_dg_eq.h"
-#include "lfc_dg_ser.h"
+#include "lfc/priv/lfc_dg_des.h"
+#include "lfc/priv/lfc_dg_eq.h"
+#include "lfc/priv/lfc_dg_ser.h"
 #include <assert.h>
 #include <limits.h>
 #include <stdbool.h>

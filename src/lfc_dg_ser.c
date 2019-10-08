@@ -1,4 +1,4 @@
-#include "lfc_dg_ser.h"
+#include "lfc/priv/lfc_dg_ser.h"
 #include "cursor/varint.h"
 #include "golay/golay.h"
 #include <assert.h>

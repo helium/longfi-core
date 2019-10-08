@@ -1,4 +1,4 @@
-#include "lfc_dg_eq.h"
+#include "lfc/priv/lfc_dg_eq.h"
 #include <string.h>
 
 /* Member EQuality. */
