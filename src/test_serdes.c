@@ -70,6 +70,7 @@ gen_ack(struct lfc_dg_ack * out) {
 
 void
 gen_frame_start(struct lfc_dg_frame_start * out) {
+    gen_frame_start_flags(&out->flags);
     out->oui = ru32();
     out->did = ru32();
     out->fp  = ru32();
