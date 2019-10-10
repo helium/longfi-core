@@ -6,7 +6,7 @@ add_library(lfc
   )
 
 target_link_libraries(lfc
-  PRIVATE golay cursor cursor_varint
+  PRIVATE golay cursor cursor_varint blake2
   )
 
 target_include_directories(lfc

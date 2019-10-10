@@ -21,6 +21,8 @@ extern "C" {
 
 /**
  * Returned by serializer to represent success or failure.
+ *
+ * TODO: meld these into top-level error type.
  */
 enum lfc_dg_ser_res {
     /** Operation successful. */
