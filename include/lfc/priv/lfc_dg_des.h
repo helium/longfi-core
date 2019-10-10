@@ -22,6 +22,8 @@ extern "C" {
 
 /**
  * Returned by parser to represent success or failure.
+ *
+ * TODO: meld these into top-level error type.
  */
 enum lfc_dg_des_res {
     /** Operation successful. */
