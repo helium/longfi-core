@@ -50,6 +50,10 @@ struct lfc_user_cfg {
     uint32_t oui;
     /** Device ID. */
     uint32_t did;
+    /** Session key. */
+    void const * key;
+    /** Size (in bytes) of session key. */
+    size_t key_len;
 };
 
 /**
