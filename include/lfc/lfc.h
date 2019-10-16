@@ -23,6 +23,10 @@ enum lfc_res {
     lfc_res_err_exception,
     /** Provided buffer is too small for request. */
     lfc_res_err_nomem,
+    /** Invalid datagram type. */
+    lfc_res_invalid_type,
+    /** Invalid datagram flags. */
+    lfc_res_invalid_flags,
 };
 
 /**
