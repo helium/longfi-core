@@ -14,11 +14,11 @@
         }                                                                      \
     } while (0)
 
-#define SER_RES(eXpr_)                                                         \
+#define LFC_RES(eXpr_)                                                         \
     do {                                                                       \
-        enum lfc_dg_ser_res res = (eXpr_);                                     \
-        if (res != lfc_dg_ser_res_ok) {                                        \
-            lfc_res_err_exception;                                             \
+        enum lfc_res res = (eXpr_);                                            \
+        if (res != lfc_res_ok) {                                               \
+            res;                                                               \
         }                                                                      \
     } while (0)
 
@@ -80,7 +80,7 @@ lfc_transmit(struct lfc *    lfc,
 
     /* Serialize datagram into caller's buffer and return serialized size. */
     struct cursor csr = cursor_new(out, *out_len);
-    SER_RES(lfc_dg_monolithic__ser(&dg, &csr));
+    LFC_RES(lfc_dg_monolithic__ser(&dg, &csr));
     *out_len = csr.pos;
     return lfc_res_ok;
 }
