@@ -20,29 +20,16 @@ extern "C" {
 
 
 /**
- * Returned by serializer to represent success or failure.
- *
- * TODO: meld these into top-level error type.
- */
-enum lfc_dg_ser_res {
-    /** Operation successful. */
-    lfc_dg_ser_res_ok,
-    /** Reached end of provided data before complete serialization. */
-    lfc_dg_ser_res_err_nomem,
-};
-
-
-/**
  * Serializes a `lfc_dg_monolithic` datagram.
  */
-enum lfc_dg_ser_res
+enum lfc_res
 lfc_dg_monolithic__ser(struct lfc_dg_monolithic const * in, struct cursor * csr);
 
 
 /**
  * Serializes a `lfc_dg_frame_start` datagram.
  */
-enum lfc_dg_ser_res
+enum lfc_res
 lfc_dg_frame_start__ser(struct lfc_dg_frame_start const * in,
                         struct cursor *                   csr);
 
@@ -50,14 +37,14 @@ lfc_dg_frame_start__ser(struct lfc_dg_frame_start const * in,
 /**
  * Serializes a `lfc_dg_frame_data` datagram.
  */
-enum lfc_dg_ser_res
+enum lfc_res
 lfc_dg_frame_data__ser(struct lfc_dg_frame_data const * in, struct cursor * csr);
 
 
 /**
  * Serializes a `lfc_dg_ack` datagram.
  */
-enum lfc_dg_ser_res
+enum lfc_res
 lfc_dg_ack__ser(struct lfc_dg_ack const * in, struct cursor * csr);
 
 /**
