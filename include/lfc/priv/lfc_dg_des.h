@@ -21,23 +21,6 @@ extern "C" {
 
 
 /**
- * Returned by parser to represent success or failure.
- *
- * TODO: meld these into top-level error type.
- */
-enum lfc_dg_des_res {
-    /** Operation successful. */
-    lfc_dg_des_res_ok,
-    /** Reached end of provided data before complete parse. */
-    lfc_dg_des_res_err_nomem,
-    /** Invalid datagram type. */
-    lfc_dg_des_res_invalid_type,
-    /** Invalid datagram flags. */
-    lfc_dg_des_res_invalid_flags,
-};
-
-
-/**
  * A successfully parsed datagram.
  */
 struct lfc_dg_des {
@@ -63,14 +46,14 @@ struct lfc_dg_des {
 /**
  * Parses a received packet.
  */
-enum lfc_dg_des_res
+enum lfc_res
 lfc_dg__des(struct lfc_dg_des * out, struct cursor * csr);
 
 
 /**
  * Parses a `monolithic` datagram.
  */
-enum lfc_dg_des_res
+enum lfc_res
 lfc_dg_monolithic__des(struct lfc_dg_monolithic * out,
                        struct lfc_dg_hdr          hdr,
                        struct cursor *            csr);
@@ -79,7 +62,7 @@ lfc_dg_monolithic__des(struct lfc_dg_monolithic * out,
 /**
  * Parses a `ack` datagram.
  */
-enum lfc_dg_des_res
+enum lfc_res
 lfc_dg_ack__des(struct lfc_dg_ack * out,
                 struct lfc_dg_hdr   hdr,
                 struct cursor *     csr);
@@ -88,7 +71,7 @@ lfc_dg_ack__des(struct lfc_dg_ack * out,
 /**
  * Parses a `frame_start` datagram.
  */
-enum lfc_dg_des_res
+enum lfc_res
 lfc_dg_frame_start__des(struct lfc_dg_frame_start * out,
                         struct lfc_dg_hdr           hdr,
                         struct cursor *             csr);
@@ -97,7 +80,7 @@ lfc_dg_frame_start__des(struct lfc_dg_frame_start * out,
 /**
  * Parses a `frame_data` datagram.
  */
-enum lfc_dg_des_res
+enum lfc_res
 lfc_dg_frame_data__des(struct lfc_dg_frame_data * out,
                        struct lfc_dg_hdr          hdr,
                        struct cursor *            csr);
@@ -106,7 +89,7 @@ lfc_dg_frame_data__des(struct lfc_dg_frame_data * out,
 /**
  * Parses a Golay-encoded datagram header.
  */
-enum lfc_dg_des_res
+enum lfc_res
 lfc_dg_hdr__des(struct lfc_dg_hdr * out, struct cursor * csr);
 
 
