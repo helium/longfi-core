@@ -7,6 +7,10 @@
 #include <limits.h>
 #include <stdbool.h>
 
+#ifdef __linux__
+#include <bsd/stdlib.h>
+#endif
+
 uint32_t
 ru32() {
     return arc4random();
