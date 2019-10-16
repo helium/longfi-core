@@ -68,7 +68,12 @@ lfc_transmit(struct lfc *    lfc,
     blake2s_state b2s;
 
     /* Compute fingerprint. */
-    B2_RES(blake2s_init(&b2s, sizeof(dg.did)));
+    if (lfc->cfg.key && lfc->cfg.key_len) {
+        B2_RES(
+            blake2s_init_key(&b2s, sizeof(dg.fp), lfc->cfg.key, lfc->cfg.key_len));
+    } else {
+        B2_RES(blake2s_init(&b2s, sizeof(dg.fp)));
+    }
     B2_RES(blake2s_update(&b2s, &hdr, sizeof(hdr)));
     B2_RES(blake2s_update(&b2s, &dg.oui, sizeof(dg.oui)));
     B2_RES(blake2s_update(&b2s, &dg.did, sizeof(dg.did)));
