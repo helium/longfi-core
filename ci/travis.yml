@@ -7,13 +7,12 @@ addons:
       - key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
     packages:
       - clang-format-5.0
-      - libbsd-dev
 
 before_script:
   - ./ci/run-clang-format.py -r include src extra
 
 script:
-  - cmake -DCMAKE_EXE_LINKER_FLAGS='-lbsd' .
-  - make VERBOSE=1
+  - cmake .
+  - make
   - make test
   - make docs

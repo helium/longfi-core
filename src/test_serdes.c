@@ -7,13 +7,13 @@
 #include <limits.h>
 #include <stdbool.h>
 
-#ifdef __linux__
-#include <bsd/stdlib.h>
-#endif
+FILE * frnd = NULL;
 
 uint32_t
 ru32() {
-    return arc4random();
+    uint32_t out;
+    fread(&out, sizeof(out), 1, frnd);
+    return out;
 }
 
 bool
@@ -25,8 +25,9 @@ bit(uint32_t in, size_t idx) {
 void
 gen_payload(void * dst, size_t * dst_len_tag) {
     memset(dst, 0, LFC_DG_CONSTANTS_MAX_PAY_LEN);
-    *dst_len_tag = arc4random_uniform(LFC_DG_CONSTANTS_MAX_PAY_LEN);
-    arc4random_buf(dst, *dst_len_tag);
+    /* NOTE: this is not truly random due to modulo bias. */
+    *dst_len_tag = ru32() % LFC_DG_CONSTANTS_MAX_PAY_LEN;
+    fread(dst, 1, *dst_len_tag, frnd);
 }
 
 #define GEN_GEN_FLAGS(DG_TYPE)                                                 \
@@ -140,11 +141,14 @@ GREATEST_MAIN_DEFS();
 int
 main(int argc, char * argv[]) {
     GREATEST_MAIN_BEGIN();
+    frnd = fopen("/dev/urandom", "r");
+    assert(frnd);
     for (int i = 0; i < 100; ++i) {
         RUN_TEST(test_ack_roundtrips);
         RUN_TEST(test_frame_data_roundtrips);
         RUN_TEST(test_frame_start_roundtrips);
         RUN_TEST(test_monolithic_roundtrips);
     }
+    fclose(frnd);
     GREATEST_MAIN_END();
 }
