@@ -4,8 +4,3 @@ add_subdirectory(golay)
 if(${BUILD_TESTING})
   add_subdirectory(greatest)
 endif(${BUILD_TESTING})
-
-install(TARGETS cursor_varint golay
-  DESTINATION lib
-)
-
