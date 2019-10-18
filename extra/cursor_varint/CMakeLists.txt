@@ -11,3 +11,5 @@ endif(${BUILD_TESTING})
 install(TARGETS cursor_varint
   DESTINATION lib
 )
+
+add_subdirectory(include)
