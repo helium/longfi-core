@@ -27,8 +27,8 @@ add_subdirectory(src)
 include(FetchContent)
 FetchContent_Declare(
   cursor
-  GIT_REPOSITORY https://github.com/JayKickliter/cursor.git
-  GIT_TAG        209cdec7693ef9fb77eb407c5ef5081bff7314a6
+  GIT_REPOSITORY https://github.com/lthiery/cursor.git
+  GIT_TAG        f5e95d501505f871a3445b856c73c736b23c54ec
   )
 FetchContent_GetProperties(cursor)
 if(NOT cursor_POPULATED)
