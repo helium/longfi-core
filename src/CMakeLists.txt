@@ -6,7 +6,7 @@ add_library(lfc
   )
 
 target_link_libraries(lfc
-  PRIVATE golay cursor cursor_varint
+  PRIVATE golay cursor cursor_varint blake2
   )
 
 target_include_directories(lfc
@@ -17,6 +17,10 @@ if(${BUILD_TESTING})
   add_executable(test_serdes test_serdes.c)
   target_link_libraries(test_serdes lfc cursor greatest)
   add_test(NAME test_serdes COMMAND test_serdes)
+
+  add_executable(test_tx_rx test_tx_rx.c)
+  target_link_libraries(test_tx_rx lfc cursor greatest)
+  add_test(NAME test_tx_rx COMMAND test_tx_rx)
 endif(${BUILD_TESTING})
 
 install(TARGETS lfc

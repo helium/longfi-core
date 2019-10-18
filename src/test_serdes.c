@@ -105,16 +105,16 @@ gen_frame_data(struct lfc_dg_frame_data * out) {
         gen_##DG_TYPE(&REF);                                                   \
                                                                                \
         /* Serialize reference. */                                             \
-        uint8_t             buf_ser[1024];                                     \
-        struct cursor       csr_ser = cursor_new(buf_ser, sizeof(buf_ser));    \
-        enum lfc_dg_ser_res sres    = lfc_dg_##DG_TYPE##__ser(&REF, &csr_ser); \
-        ASSERT_EQ(lfc_dg_ser_res_ok, sres);                                    \
+        uint8_t       buf_ser[1024];                                           \
+        struct cursor csr_ser = cursor_new(buf_ser, sizeof(buf_ser));          \
+        enum lfc_res  sres    = lfc_dg_##DG_TYPE##__ser(&REF, &csr_ser);       \
+        ASSERT_EQ(lfc_res_ok, sres);                                           \
                                                                                \
         /* Deserialize. */                                                     \
-        struct cursor       csr_des = cursor_new(buf_ser, csr_ser.pos);        \
-        struct lfc_dg_des   deserialized;                                      \
-        enum lfc_dg_des_res dres = lfc_dg__des(&deserialized, &csr_des);       \
-        ASSERT_EQ(lfc_dg_ser_res_ok, dres);                                    \
+        struct cursor     csr_des = cursor_new(buf_ser, csr_ser.pos);          \
+        struct lfc_dg_des deserialized;                                        \
+        enum lfc_res      dres = lfc_dg__des(&deserialized, &csr_des);         \
+        ASSERT_EQ(lfc_res_ok, dres);                                           \
         ASSERT_EQ_FMT(lfc_dg_type_##DG_TYPE, deserialized.type, "%x");         \
         ASSERT(lfc_dg_##DG_TYPE##__eq(&REF, &deserialized.DG_TYPE));           \
                                                                                \
@@ -122,7 +122,7 @@ gen_frame_data(struct lfc_dg_frame_data * out) {
         uint8_t       buf_reser[1024];                                         \
         struct cursor csr_reser = cursor_new(buf_reser, sizeof(buf_reser));    \
         sres = lfc_dg_##DG_TYPE##__ser(&deserialized.DG_TYPE, &csr_reser);     \
-        ASSERT_EQ(lfc_dg_ser_res_ok, sres);                                    \
+        ASSERT_EQ(lfc_res_ok, sres);                                           \
                                                                                \
         /* Compare serilized and reserialized. */                              \
         ASSERT_EQ_FMT(csr_ser.pos, csr_reser.pos, "%d");                       \
