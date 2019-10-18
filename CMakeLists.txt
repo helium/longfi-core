@@ -18,6 +18,7 @@ include(CTest)
 ##########################################################################
 add_subdirectory(docs)
 add_subdirectory(extra)
+add_subdirectory(include)
 add_subdirectory(src)
 
 

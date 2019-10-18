@@ -7,3 +7,9 @@ target_include_directories(golay
   )
 
 add_subdirectory(test)
+
+install(TARGETS golay
+  DESTINATION lib
+)
+
+add_subdirectory(include)

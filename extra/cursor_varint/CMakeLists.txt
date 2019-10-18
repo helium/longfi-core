@@ -7,3 +7,9 @@ if(${BUILD_TESTING})
   target_link_libraries(test_varint cursor_varint greatest)
   add_test(NAME test_varint COMMAND test_varint)
 endif(${BUILD_TESTING})
+
+install(TARGETS cursor_varint
+  DESTINATION lib
+)
+
+add_subdirectory(include)

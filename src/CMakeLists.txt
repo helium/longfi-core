@@ -18,3 +18,7 @@ if(${BUILD_TESTING})
   target_link_libraries(test_serdes lfc cursor greatest)
   add_test(NAME test_serdes COMMAND test_serdes)
 endif(${BUILD_TESTING})
+
+install(TARGETS lfc
+  DESTINATION lib
+)
