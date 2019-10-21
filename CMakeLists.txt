@@ -29,7 +29,7 @@ include(FetchContent)
 FetchContent_Declare(
   cursor
   GIT_REPOSITORY https://github.com/lthiery/cursor.git
-  GIT_TAG        66eb6da32bbcc22597a5708a456dfb704f134f87
+  GIT_TAG        04e1a491f272e325fcca8b05745620cfe09f68ef
   )
 FetchContent_GetProperties(cursor)
 if(NOT cursor_POPULATED)
