@@ -10,3 +10,9 @@ add_library(blake2
 target_include_directories(blake2
   PUBLIC include
   )
+
+install(TARGETS blake2
+  DESTINATION lib
+)
+
+add_subdirectory(include)
