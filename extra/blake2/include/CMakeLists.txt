@@ -1,1 +1,4 @@
-install(DIRECTORY blake2 DESTINATION include)
+
+install(FILES blake2.h
+  DESTINATION include/blake
+)
