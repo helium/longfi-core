@@ -34,7 +34,8 @@ gen_key(uint8_t key[static SESSION_KEY_MAX_LEN]) {
 
 struct lfc
 gen_lfc() {
-    uint8_t             session_key[SESSION_KEY_MAX_LEN];
+    /* `session_key` is `static` so it outlives `cfg`'s pointer to it. */
+    static uint8_t      session_key[SESSION_KEY_MAX_LEN];
     size_t              session_key_len = gen_key(session_key);
     struct lfc_user_cfg cfg             = (struct lfc_user_cfg){
         .oui     = ru32(),
