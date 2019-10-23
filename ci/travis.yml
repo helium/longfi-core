@@ -12,7 +12,7 @@ before_script:
   - ./ci/run-clang-format.py -r include src extra
 
 script:
-  - cmake .
+  - cmake -DCMAKE_C_FLAGS='-Wall -Wextra -fsanitize=undefined,address -fno-omit-frame-pointer' -DCMAKE_BUILD_TYPE=RelWithDebInfo .
   - make
   - make test
   - make docs
