@@ -5,6 +5,7 @@
  * @file
  */
 
+#include "datagram.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -14,64 +15,92 @@ extern "C" {
 
 
 /**
- * LongFi regulatory region.
- *
- * LongFi users are responsible for configuring their devices' region
- * in order to remain compliant with regulations.
+ * Return codes for top-level API calls.
  */
-enum lfc_region {
-    /** USA */
-    lfc_region_fcc,
+enum lfc_res {
+    /** Success, no error. */
+    lfc_res_ok,
+    /** Received datagram does not match configured OUI or DID. */
+    lfc_res_err_addr,
+    /** Received datagram's fingerprint does not match locally
+     * computed fingerprint. */
+    lfc_res_err_fingerprint,
+    /** Generic, exceptional error. */
+    lfc_res_err_exception,
+    /** Provided buffer is too small for request. */
+    lfc_res_err_nomem,
+    /** Invalid datagram type. */
+    lfc_res_invalid_type,
+    /** Invalid datagram flags. */
+    lfc_res_invalid_flags,
 };
 
 /**
  * LongFi user configuration.
  */
-struct lfc_user_cfg {};
+struct lfc_user_cfg {
+    /** Data provided by user, and included with every callback. */
+    void * cb_data;
+    /** Organizational Unique Identifier. */
+    uint32_t oui;
+    /** Device ID. */
+    uint32_t did;
+    /** Session key. */
+    void const * key;
+    /** Size (in bytes) of session key. */
+    size_t key_len;
+};
 
 /**
  * LongFi context.
  */
 struct lfc {
+    /** Monotonically increasing number included in datagrams. */
+    uint32_t seq;
     /** User-provided configuration. */
     struct lfc_user_cfg cfg;
-};
-
-/**
- * LoRa spreading factor.
- *
- * Low spreading factors spend less time on air but are more
- * susceptible to errors, where as large spreading factors are more
- * tolerant to noise but are slow to transmit.
- */
-enum lfc_sf {
-    sf_5  = 5,
-    sf_6  = 6,
-    sf_7  = 7,
-    sf_8  = 8,
-    sf_9  = 9,
-    sf_10 = 10,
-    sf_11 = 11,
-    sf_12 = 12,
 };
 
 /**
  * Initializes a user-provided `lfc` object.
  */
 void
-lfc_init(struct lfc const * lfc);
+lfc_init(struct lfc * lfc, struct lfc_user_cfg cfg);
 
 /**
- * Push a received payload into the context.
+ * Decodes a datagram from `in` buffer.
+ *
+ * @param lfc               LongFi Context.
+ * @param in[in]            Buffer containing an encoded datagram.
+ * @param in_len            Length of `in`.
+ * @param out[out]          Buffer to write decoded payload to.
+ * @param[in,out] dg_len    in: capacity of `out` buffer.
+ *                          out: actual size of payload.
  */
-void
-lfc_push_rx(struct lfc const * lfc, uint8_t const * pay, size_t pay_len);
+enum lfc_res
+lfc_receive(struct lfc const * lfc,
+            uint8_t const *    in,
+            size_t             in_len,
+            uint8_t *          out,
+            size_t *           out_len);
 
 /**
- * Initializes and returns a transmit plan.
+ * Creates and encodes a datagram into the provided `out` buffer from
+ * `pay`.
+ *
+ * @param lfc               LongFi Context.
+ * @param pay               Payload you want to send.
+ * @param pay_len           Length of `pay`.
+ * @param out               Buffer to serialize datagram into.
+ * @param[in,out] dg_len    in: capacity of `out` buffer.
+ *                          out: actual serialized size of datagram.
  */
-void
-lfc_transmit(struct lfc const * lfc, uint8_t const * pay, size_t pay_len);
+enum lfc_res
+lfc_transmit(struct lfc *    lfc,
+             uint8_t const * pay,
+             size_t          pay_len,
+             uint8_t *       out,
+             size_t *        out_len);
 
 
 #ifdef __cplusplus

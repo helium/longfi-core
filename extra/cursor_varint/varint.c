@@ -18,7 +18,7 @@ cursor_unpack_var_le_u32(struct cursor * csr, uint32_t * dst) {
         if (res != cursor_res_ok) {
             return res;
         }
-        out |= (input & 127) << (7 * i);
+        out |= (uint32_t)(input & 127) << (7 * i);
         if (!_is_extended(input)) {
             break;
         }
