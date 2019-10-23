@@ -10,7 +10,7 @@
 #define B2_RES(eXpr_)                                                          \
     do {                                                                       \
         if (eXpr_) {                                                           \
-            lfc_res_err_exception;                                             \
+            return lfc_res_err_exception;                                      \
         }                                                                      \
     } while (0)
 
@@ -18,7 +18,7 @@
     do {                                                                       \
         enum lfc_res LrEs = (eXpr_);                                           \
         if (LrEs != lfc_res_ok) {                                              \
-            LrEs;                                                              \
+            return LrEs;                                                       \
         }                                                                      \
     } while (0)
 
