@@ -198,7 +198,9 @@ lfc_dg_hdr__des(struct lfc_dg_hdr * out, struct cursor * csr) {
     uint8_t dg_flags_bits   = (dec_hdr_bits & 0x3F /* 0b11_1111 */);
 
     /* We're not handling extended tags yet. */
-    assert(!dg_extended_bit);
+    if (dg_extended_bit) {
+        return lfc_res_err_exception;
+    }
 
     *out = (struct lfc_dg_hdr){
         .bit_errs  = dec_bit_errs,

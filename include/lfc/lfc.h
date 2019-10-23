@@ -36,17 +36,6 @@ enum lfc_res {
 };
 
 /**
- * LongFi regulatory region.
- *
- * LongFi users are responsible for configuring their devices' region
- * in order to remain compliant with regulations.
- */
-enum lfc_region {
-    /** USA */
-    lfc_region_fcc,
-};
-
-/**
  * LongFi user configuration.
  */
 struct lfc_user_cfg {
@@ -70,24 +59,6 @@ struct lfc {
     uint32_t seq;
     /** User-provided configuration. */
     struct lfc_user_cfg cfg;
-};
-
-/**
- * LoRa spreading factor.
- *
- * Low spreading factors spend less time on air but are more
- * susceptible to errors, where as large spreading factors are more
- * tolerant to noise but are slow to transmit.
- */
-enum lfc_sf {
-    sf_5  = 5,
-    sf_6  = 6,
-    sf_7  = 7,
-    sf_8  = 8,
-    sf_9  = 9,
-    sf_10 = 10,
-    sf_11 = 11,
-    sf_12 = 12,
 };
 
 /**
