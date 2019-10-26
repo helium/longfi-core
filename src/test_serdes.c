@@ -12,7 +12,9 @@ FILE * frnd = NULL;
 uint32_t
 ru32() {
     uint32_t out;
-    fread(&out, sizeof(out), 1, frnd);
+    int      n = fread(&out, sizeof(out), 1, frnd);
+    assert(1 == n);
+    (void)n;
     return out;
 }
 
@@ -27,7 +29,9 @@ gen_payload(void * dst, size_t * dst_len_tag) {
     memset(dst, 0, LFC_DG_CONSTANTS_MAX_PAY_LEN);
     /* NOTE: this is not truly random due to modulo bias. */
     *dst_len_tag = ru32() % LFC_DG_CONSTANTS_MAX_PAY_LEN;
-    fread(dst, 1, *dst_len_tag, frnd);
+    size_t n     = fread(dst, 1, *dst_len_tag, frnd);
+    assert(*dst_len_tag == n);
+    (void)n;
 }
 
 #define GEN_GEN_FLAGS(DG_TYPE)                                                 \

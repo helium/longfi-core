@@ -8,7 +8,9 @@ uint32_t
 rand_u32() {
     int      f = open("/dev/urandom", O_RDONLY);
     uint32_t val;
-    assert(sizeof(val) == read(f, &val, sizeof(val)));
+    int      n = read(f, &val, sizeof(val));
+    assert(sizeof(val) == n);
+    (void)n;
     close(f);
     return val;
 }

@@ -12,7 +12,9 @@ FILE * frnd = NULL;
 uint32_t
 ru32() {
     uint32_t out;
-    fread(&out, 1, sizeof(out), frnd);
+    int      n = fread(&out, sizeof(out), 1, frnd);
+    assert(1 == n);
+    (void)n;
     return out;
 }
 
@@ -20,7 +22,9 @@ size_t
 gen_payload(uint8_t payload[static LFC_DG_CONSTANTS_MAX_PAY_LEN]) {
     memset(payload, 0, LFC_DG_CONSTANTS_MAX_PAY_LEN);
     size_t len = ru32() % (LFC_DG_CONSTANTS_MAX_PAY_LEN + 1);
-    fread(payload, 1, len, frnd);
+    size_t n   = fread(payload, 1, len, frnd);
+    assert(len == n);
+    (void)n;
     return len;
 }
 
@@ -28,7 +32,9 @@ size_t
 gen_key(uint8_t key[static SESSION_KEY_MAX_LEN]) {
     size_t key_len = ru32() % (SESSION_KEY_MAX_LEN + 1);
     assert(key_len <= SESSION_KEY_MAX_LEN);
-    fread(key, 1, key_len, frnd);
+    size_t n = fread(key, 1, key_len, frnd);
+    assert(key_len == n);
+    (void)n;
     return key_len;
 }
 
