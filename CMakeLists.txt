@@ -13,6 +13,25 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(CTest)
 
+
+##########################################################################
+# Static Analysis                                                        #
+##########################################################################
+find_program(CPPCHECK NAMES cppcheck)
+if(CPPCHECK)
+  message(STATUS "Found cppcheck: ${CPPCHECK}")
+  set(CMAKE_C_CPPCHECK ${CPPCHECK}
+    --enable=all
+    --suppress=missingIncludeSystem
+    --suppress=unusedFunction
+    --error-exitcode=1
+    --quiet
+    --std=c${CMAKE_C_STANDARD}
+    --template=gcc
+    )
+endif()
+
+
 ##########################################################################
 # Local                                                                  #
 ##########################################################################
@@ -34,5 +53,6 @@ FetchContent_Declare(
 FetchContent_GetProperties(cursor)
 if(NOT cursor_POPULATED)
   FetchContent_Populate(cursor)
+  unset(CMAKE_C_CPPCHECK)
   add_subdirectory(${cursor_SOURCE_DIR} ${cursor_BINARY_DIR})
 endif()
