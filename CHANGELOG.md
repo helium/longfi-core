@@ -20,6 +20,13 @@ Bug fixes:
 -->
 
 
+next-release
+==================
+Support:
+
+* [#15](https://github.com/helium/longfi-core/pull/15):
+  Run `cppcheck` when building if available.
+
 0.1.1 (2019-10-25)
 ==================
 Bug fixes:
