@@ -24,7 +24,6 @@ if(CPPCHECK)
     --enable=all
     --suppress=missingIncludeSystem
     --suppress=unusedFunction
-    --error-exitcode=1
     --quiet
     --std=c${CMAKE_C_STANDARD}
     --template=gcc
