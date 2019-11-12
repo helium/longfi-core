@@ -2,6 +2,7 @@
 #include "blake2.h"
 #include "golay/golay.h"
 #include "lfc/datagram.h"
+#include "lfc/fingerprint.h"
 #include "lfc/priv/lfc_dg_des.h"
 #include "lfc/priv/lfc_dg_ser.h"
 #include <assert.h>
@@ -43,26 +44,15 @@ lfc_dg_monolithic__fingerprint(struct lfc const *               lfc,
     /* Assuming no set flags for this PoC. */
     uint8_t  flag_bits = 0;
     uint16_t hdr       = (lfc_dg_type_monolithic << 6) | flag_bits;
-
-    blake2s_state b2s;
-
-    /* Compute fingerprint. */
-    if (lfc->cfg.key && lfc->cfg.key_len) {
-        B2_RES(
-            blake2s_init_key(&b2s, sizeof(dg->fp), lfc->cfg.key, lfc->cfg.key_len));
-    } else {
-        B2_RES(blake2s_init(&b2s, sizeof(dg->fp)));
-    }
-    B2_RES(blake2s_update(&b2s, &hdr, sizeof(hdr)));
-    B2_RES(blake2s_update(&b2s, &dg->oui, sizeof(dg->oui)));
-    B2_RES(blake2s_update(&b2s, &dg->did, sizeof(dg->did)));
-    B2_RES(blake2s_update(&b2s, &dg->seq, sizeof(dg->seq)));
-    uint8_t hash_pay[BLAKE2S_OUTBYTES];
-    B2_RES(blake2s(hash_pay, sizeof(hash_pay), dg->pay, dg->pay_len, NULL, 0));
-    B2_RES(blake2s_update(&b2s, hash_pay, sizeof(hash_pay)));
-    B2_RES(blake2s_final(&b2s, out, sizeof(*out)));
-
-    return lfc_res_ok;
+    return lfc_fingerprint_monolithic(lfc->cfg.key,
+                                      lfc->cfg.key_len,
+                                      hdr,
+                                      dg->oui,
+                                      dg->did,
+                                      dg->seq,
+                                      dg->pay,
+                                      dg->pay_len,
+                                      out);
 }
 
 
