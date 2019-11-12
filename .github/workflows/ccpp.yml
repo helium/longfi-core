@@ -1,16 +1,19 @@
-name: C/C++ CI
+name: CI
 
 on: [push, pull_request]
 
 jobs:
   build:
-
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+    env:
+      CC: ${{ matrix.compiler }}
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v1
     - name: Generate
-      run: cmake .
+      run: cmake -DCMAKE_C_FLAGS='-Wall -Wextra -Werror -fsanitize=undefined,address -fno-omit-frame-pointer' -DCMAKE_BUILD_TYPE=RelWithDebInfo .
     - name: Build
       run: make
     - name: Test
