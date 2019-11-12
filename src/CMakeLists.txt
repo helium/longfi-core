@@ -3,6 +3,7 @@ add_library(lfc
   lfc_dg_des.c
   lfc_dg_eq.c
   lfc_dg_ser.c
+  lfc_fingerprint.c
   )
 
 target_link_libraries(lfc
@@ -21,6 +22,10 @@ if(${BUILD_TESTING})
   add_executable(test_tx_rx test_tx_rx.c)
   target_link_libraries(test_tx_rx lfc cursor greatest)
   add_test(NAME test_tx_rx COMMAND test_tx_rx)
+
+  add_executable(test_fingerprinting test_fingerprinting.c)
+  target_link_libraries(test_fingerprinting lfc cursor greatest)
+  add_test(NAME test_fingerprinting COMMAND test_fingerprinting)
 endif(${BUILD_TESTING})
 
 install(TARGETS lfc

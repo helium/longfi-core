@@ -22,6 +22,11 @@ Bug fixes:
 
 next-release
 ==================
+Feature enhancements:
+
+* [#19](https://github.com/helium/longfi-core/pull/19):
+  Add fingerprint verification API.
+
 Support:
 
 * [#15](https://github.com/helium/longfi-core/pull/15):
