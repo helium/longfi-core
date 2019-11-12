@@ -1,0 +1,17 @@
+name: C/C++ CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Generate
+      run: cmake .
+    - name: Build
+      run: make
+    - name: Test
+      run: make test
