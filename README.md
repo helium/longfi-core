@@ -1,3 +1,5 @@
+![](https://github.com/helium/longfi-core/workflows/CI/badge.svg)
+
 # LongFi Core
 
 ## Building
