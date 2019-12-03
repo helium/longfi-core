@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.11)
 project(LongFiCore
   # Remember to update `src/text_version.c` when bumping the version,
   # otherwise tests/CI will fail.
-  VERSION   0.2.0
+  VERSION   0.3.0
   LANGUAGES C
   )
 

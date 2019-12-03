@@ -20,6 +20,13 @@ Bug fixes:
 -->
 
 
+0.3.0 (2019-12-03)
+==================
+Feature enhancements:
+
+* [#22](https://github.com/helium/longfi-core/pull/22):
+  Add `lfc_version()` to API.
+
 0.2.0 (2019-11-12)
 ==================
 Feature enhancements:
