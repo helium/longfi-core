@@ -62,6 +62,21 @@ struct lfc {
 };
 
 /**
+ * Represents this library's version.
+ */
+struct lfc_version {
+    uint8_t major;
+    uint8_t minor;
+    uint8_t patch;
+};
+
+/**
+ * Returns `longfi-core`'s version number.
+ */
+struct lfc_version
+lfc_version(void);
+
+/**
  * Initializes a user-provided `lfc` object.
  */
 void
