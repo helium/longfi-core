@@ -132,6 +132,52 @@ lfc_transmit(struct lfc *    lfc,
              uint8_t *       out,
              size_t *        out_len);
 
+/**
+ * TODO
+ */
+struct lfc_transmit_plan {
+    struct lfc * const    _lfc;
+    uint8_t const *       _pay_pos;
+    uint8_t const * const _pay_end;
+    size_t const          _max_chunk_len;
+    size_t const          _n_chunks;
+};
+
+/**
+ * Generates a transmit plan from for the user-provided payload.
+ *
+ * @param lfc               LongFi Context.
+ * @param pay               Payload you want to send.
+ * @param pay_len           Length of `pay`.
+ * @param max_chunk_len     Maximum allowable chunk size for multipart messages.
+ */
+struct lfc_transmit_plan
+lfc_transmit_plan_init(struct lfc *    lfc,
+                       uint8_t const * pay,
+                       size_t          pay_len,
+                       size_t          max_chunk_len);
+
+/**
+ * Generate next serialized serialized message from a transmit plan.
+ *
+ * @param plan              Transmit plan previously created with `lfc_transmit_plan_init()`.
+ * @param out               Buffer to serialize mesage into.
+ * @param[in,out] out_len    in: capacity of `out` buffer.\n
+ *                          out: actual serialized size of datagram.
+ */
+enum lfc_res
+lfc_transmit_plan_next(struct lfc_transmit_plan * plan,
+                       uint8_t *                  out,
+                       size_t *                   out_len);
+
+/**
+ * Returns how many more transmit buffers (chunks) are left until this
+ * multipart send is complete.
+ *
+ * @param plan
+ */
+size_t
+lfc_transmit_plan_chunks_remaining(struct lfc_transmit_plan const * plan);
 
 #ifdef __cplusplus
 }

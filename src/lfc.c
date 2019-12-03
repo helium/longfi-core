@@ -24,7 +24,7 @@
     } while (0)
 
 /* Returns and increments sequence number. */
-uint32_t
+static uint32_t
 lfc_seq(struct lfc * lfc);
 
 
@@ -134,7 +134,43 @@ lfc_receive(struct lfc const * lfc,
 }
 
 
-uint32_t
+static uint32_t
 lfc_seq(struct lfc * lfc) {
     return lfc->seq++;
+}
+
+
+static size_t
+lfc_tranmit_plan_chunks(size_t max_chunk_len, size_t pay_len) {
+    /* TODO: account for datagram overhead. */
+    if (pay_len <= max_chunk_len) {
+        return 1;
+    } else {
+        assert(0);
+        return 1;
+    }
+}
+
+struct lfc_transmit_plan
+lfc_transmit_plan_new(struct lfc *    lfc,
+                      uint8_t const * pay,
+                      size_t          pay_len,
+                      size_t          max_chunk_len) {
+    return (struct lfc_transmit_plan){
+        ._lfc           = lfc,
+        ._max_chunk_len = max_chunk_len,
+        ._pay_pos       = pay,
+        ._pay_end       = pay + pay_len,
+        ._n_chunks      = lfc_tranmit_plan_chunks(max_chunk_len, pay_len),
+    };
+}
+
+enum lfc_res
+lfc_transmit_plan_next(struct lfc_transmit_plan * plan,
+                       uint8_t *                  out,
+                       size_t *                   out_len) {
+    (void)plan;
+    (void)out;
+    (void)out_len;
+    return lfc_res_ok;
 }
