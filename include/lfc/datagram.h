@@ -92,7 +92,7 @@ struct lfc_dg_monolithic {
          * factor.
          */
         bool ldpc;
-    } flags;
+    } flags; /**< Flags. */
     /** Organization ID. */
     uint32_t oui;
     /** Device ID. */
@@ -151,7 +151,7 @@ struct lfc_dg_frame_start {
          * factor.
          */
         bool ldpc;
-    } flags;
+    } flags; /**< Flags. */
     /** Organization ID. */
     uint32_t oui;
     /** Device ID. */
@@ -193,7 +193,7 @@ struct lfc_dg_frame_data {
          * factor.
          */
         bool ldpc;
-    } flags;
+    } flags; /**< Flags. */
     /** Organization ID. */
     uint32_t oui;
     /** Device ID. */
@@ -253,7 +253,9 @@ struct lfc_dg_ack {
          * the current region and spreading factor.
          */
         bool ldpc;
-    } flags;
+    }
+    /** Ack-specific flags. */
+    flags;
     /** Organization ID. */
     uint32_t oui;
     /** Device ID. */
