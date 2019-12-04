@@ -3,6 +3,9 @@
 
 /**
  * @file
+ *
+ * @addtogroup API
+ * @{
  */
 
 #include "datagram.h"
@@ -65,8 +68,17 @@ struct lfc {
  * Represents this library's version.
  */
 struct lfc_version {
+    /**
+     * Indicates braking changes when incremented.
+     */
     uint8_t major;
+    /**
+     * Indicates added functionality when incremented.
+     */
     uint8_t minor;
+    /**
+     * Indicates bug fixes when incremented.
+     */
     uint8_t patch;
 };
 
@@ -78,6 +90,9 @@ lfc_version(void);
 
 /**
  * Initializes a user-provided `lfc` object.
+ *
+ * @param lfc               LongFi Context.
+ * @param cfg               User-provided configuration.
  */
 void
 lfc_init(struct lfc * lfc, struct lfc_user_cfg cfg);
@@ -86,10 +101,10 @@ lfc_init(struct lfc * lfc, struct lfc_user_cfg cfg);
  * Decodes a datagram from `in` buffer.
  *
  * @param lfc               LongFi Context.
- * @param in[in]            Buffer containing an encoded datagram.
+ * @param[in] in            Buffer containing an encoded datagram.
  * @param in_len            Length of `in`.
- * @param out[out]          Buffer to write decoded payload to.
- * @param[in,out] dg_len    in: capacity of `out` buffer.
+ * @param[out] out          Buffer to write decoded payload to.
+ * @param[in,out] out_len    in: capacity of `out` buffer.\n
  *                          out: actual size of payload.
  */
 enum lfc_res
@@ -107,7 +122,7 @@ lfc_receive(struct lfc const * lfc,
  * @param pay               Payload you want to send.
  * @param pay_len           Length of `pay`.
  * @param out               Buffer to serialize datagram into.
- * @param[in,out] dg_len    in: capacity of `out` buffer.
+ * @param[in,out] out_len    in: capacity of `out` buffer.\n
  *                          out: actual serialized size of datagram.
  */
 enum lfc_res
@@ -121,5 +136,7 @@ lfc_transmit(struct lfc *    lfc,
 #ifdef __cplusplus
 }
 #endif
+
+/** @}*/
 
 #endif /* LFC_314C7FBF */

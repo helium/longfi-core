@@ -1,0 +1,15 @@
+name: Documentation
+
+on: [push, pull_request]
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install Doxygen
+      run: sudo apt-get install graphviz doxygen
+    - name: Configure
+      run: cmake .
+    - name: Generate Documentation
+      run: make docs
