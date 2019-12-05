@@ -221,6 +221,7 @@ test_fingerprinting_passes() {
     PASS();
 }
 
+// cppcheck-suppress unreadVariable
 GREATEST_MAIN_DEFS();
 
 int

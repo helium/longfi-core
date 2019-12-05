@@ -79,6 +79,7 @@ test_tx_rx_passes() {
     GREATEST_PASS();
 }
 
+// cppcheck-suppress unreadVariable
 GREATEST_MAIN_DEFS();
 
 int

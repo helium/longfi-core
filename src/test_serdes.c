@@ -140,6 +140,7 @@ GEN_TEST(frame_data);
 GEN_TEST(frame_start);
 GEN_TEST(monolithic);
 
+// cppcheck-suppress unreadVariable
 GREATEST_MAIN_DEFS();
 
 int
