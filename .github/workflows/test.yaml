@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Install Dependencies
+      run: sudo apt-get install cppcheck
     - name: Generate
       run: cmake -DCMAKE_C_FLAGS='-Wall -Wextra -Werror -fsanitize=undefined,address -fno-omit-frame-pointer' -DCMAKE_BUILD_TYPE=RelWithDebInfo .
     - name: Build
