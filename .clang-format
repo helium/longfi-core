@@ -11,8 +11,6 @@ AlwaysBreakAfterReturnType: TopLevel
 BinPackArguments: false
 BinPackParameters: false
 BreakBeforeBinaryOperators: NonAssignment
-BraceWrapping:
-  AfterExternBlock: false
 BreakConstructorInitializersBeforeComma: true
 ColumnLimit: 80
 ExperimentalAutoDetectBinPacking: false

@@ -1,0 +1,13 @@
+name: Check Formatting
+
+on: [push, pull_request]
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install
+      run: sudo apt-get install clang-format-5.0
+    - name: Formatting
+      run: ./ci/run-clang-format.py --clang-format-executable clang-format-5.0 -r include src extra
