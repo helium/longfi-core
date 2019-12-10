@@ -38,20 +38,24 @@ gen_key(uint8_t key[static SESSION_KEY_MAX_LEN]) {
     return key_len;
 }
 
-struct lfc
-gen_lfc() {
+void
+gen_lfc_pair(struct lfc * sender, struct lfc * receiver) {
     /* `session_key` is `static` so it outlives `cfg`'s pointer to it. */
     static uint8_t      session_key[SESSION_KEY_MAX_LEN];
     size_t              session_key_len = gen_key(session_key);
     struct lfc_user_cfg cfg             = (struct lfc_user_cfg){
+        .personality =
+            (ru32() & 1) ? lfc_personality_device : lfc_personality_router,
         .oui     = ru32(),
         .did     = ru32(),
         .key     = session_key,
         .key_len = session_key_len,
     };
-    struct lfc lfc;
-    lfc_init(&lfc, cfg);
-    return lfc;
+    lfc_init(sender, cfg);
+    cfg.personality = cfg.personality == lfc_personality_device
+                          ? lfc_personality_router
+                          : lfc_personality_device;
+    lfc_init(receiver, cfg);
 }
 
 TEST
@@ -62,16 +66,18 @@ test_tx_rx_passes() {
     uint8_t encoded[256];
     size_t  encoded_len = sizeof(encoded);
 
-    struct lfc lfc = gen_lfc();
+    struct lfc sender;
+    struct lfc receiver;
+    gen_lfc_pair(&sender, &receiver);
 
     ASSERT_EQ_FMT(lfc_res_ok,
-                  lfc_transmit(&lfc, payload, payload_len, encoded, &encoded_len),
+                  lfc_transmit(&sender, payload, payload_len, encoded, &encoded_len),
                   "%d");
 
     uint8_t decoded[256];
     size_t  decoded_len = sizeof(decoded);
     ASSERT_EQ_FMT(lfc_res_ok,
-                  lfc_receive(&lfc, encoded, encoded_len, decoded, &decoded_len),
+                  lfc_receive(&receiver, encoded, encoded_len, decoded, &decoded_len),
                   "%d");
     ASSERT_EQ_FMT(decoded_len, payload_len, "%zu");
     ASSERT_MEM_EQ(decoded, payload, decoded_len);

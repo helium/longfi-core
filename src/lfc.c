@@ -71,7 +71,8 @@ lfc_transmit(struct lfc *    lfc,
     struct lfc_dg_monolithic dg =
         (struct lfc_dg_monolithic){.flags =
                                        (struct lfc_dg_monolithic_flags){
-                                           .downlink   = false,
+                                           .downlink = lfc->cfg.personality
+                                                       == lfc_personality_router,
                                            .should_ack = false,
                                            .cts_rts    = false,
                                            .priority   = false,
@@ -109,6 +110,13 @@ lfc_receive(struct lfc const * lfc,
 
     if (dg.type != lfc_dg_type_monolithic) {
         return lfc_res_invalid_type;
+    }
+
+    if ((dg.monolithic.flags.downlink
+         && lfc->cfg.personality == lfc_personality_router)
+        || (!dg.monolithic.flags.downlink
+            && lfc->cfg.personality == lfc_personality_device)) {
+        return lfc_res_err_addr;
     }
 
     if (out_cap < dg.monolithic.pay_len) {

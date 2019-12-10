@@ -39,9 +39,30 @@ enum lfc_res {
 };
 
 /**
+ * Indicates the kind of device is using this API.
+ */
+enum lfc_personality {
+    /**
+     * End-deivce (AKA node, sensor, etc).
+     *
+     * Datagrams emanating from a device are considered uplink.
+     */
+    lfc_personality_device,
+    /**
+     * Router.
+     *
+     * Datagrams emanating from a router, via a hotspot, are
+     * considered downlink.
+     */
+    lfc_personality_router,
+};
+
+/**
  * LongFi user configuration.
  */
 struct lfc_user_cfg {
+    /** User's personality (device or router). */
+    enum lfc_personality personality;
     /** Organizational Unique Identifier. */
     uint32_t oui;
     /** Device ID. */
