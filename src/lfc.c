@@ -24,7 +24,7 @@
     } while (0)
 
 /* Returns and increments sequence number. */
-uint32_t
+static uint32_t
 lfc_seq(struct lfc * lfc);
 
 
@@ -134,7 +134,7 @@ lfc_receive(struct lfc const * lfc,
 }
 
 
-uint32_t
+static uint32_t
 lfc_seq(struct lfc * lfc) {
     return lfc->seq++;
 }

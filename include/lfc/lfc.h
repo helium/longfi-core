@@ -42,8 +42,6 @@ enum lfc_res {
  * LongFi user configuration.
  */
 struct lfc_user_cfg {
-    /** Data provided by user, and included with every callback. */
-    void * cb_data;
     /** Organizational Unique Identifier. */
     uint32_t oui;
     /** Device ID. */
