@@ -1,0 +1,7 @@
+tests/test
+examples/simple
+*.o
+*.a
+*.gcda*
+*.gcno*
+build*/
